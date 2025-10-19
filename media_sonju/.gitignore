@@ -1,0 +1,6 @@
+.env
+.venv
+database
+data
+video_data
+__pycache__
