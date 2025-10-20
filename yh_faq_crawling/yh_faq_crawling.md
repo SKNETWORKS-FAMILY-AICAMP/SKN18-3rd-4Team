@@ -36,7 +36,7 @@ playwright install chromium
 
 ```
 faq_crawling/
-├── faq_crawling_table_2_md.py  # 메인 크롤링 스크립트
+├── faq_crawling.py  # 메인 크롤링 스크립트
 └── skmagic_faq_data/                      # 크롤링 결과 저장 폴더 (자동 생성)
     ├── 정수기_서브카테고리1.csv
     ├── 정수기_서브카테고리2.csv
@@ -91,11 +91,10 @@ for cat, id, bracket in categories:
 | --- | --- | --- |
 | `sub_category` | 서브 카테고리 | 렌탈/멤버십 |
 | `title` | FAQ 제목 | 렌탈 신청은 어떻게 하나요? |
-| `text` | 본문 텍스트 (표 제외) | 홈페이지 또는 고객센터를 통해... |
-| `table_markdown` | 표 데이터 (Markdown 형식) | [표1]<br>\| 항목 \| 내용 \|... |
+| `text` | 본문 텍스트 (표 포함) | 홈페이지 또는 고객센터를 통해... |
 | `images` | 이미지 URL 목록 (파이프 구분) | https://...jpg\|https://...png |
 
-표 내 이미지가 있는 경우 `[이미지]`로 표시.
+표 내 이미지가 있는 경우 `[image_url]`로 표시.
 
 ---
 
