@@ -4,11 +4,6 @@ from langchain.vectorstores.base import VectorStore
 import psycopg2
 import psycopg2.extras
 import json
-from vetordb.connect_db import connect_DB
-from vetordb.split_chunk import make_chunk
-from vetordb.set_embedding import set_embedding_model
-from dotenv import load_dotenv
-
 
 class CustomPGVector(VectorStore):
     def __init__(self, db: Any, embedding_fn, table: str = "faq_vectordb"):
@@ -48,8 +43,7 @@ class CustomPGVector(VectorStore):
             conn.commit()
         finally:
             self.db.put_connection(conn)
-        
-
+    
     def similarity_search(self, query: str, k: int = 4,
                           filter: Optional[Dict[str, Any]] = None) -> List[Document]:
         
@@ -105,27 +99,56 @@ class CustomPGVector(VectorStore):
             rows = self.__get_unique_documents(cur.fetchall())
 
         return [Document(page_content=row[0], metadata=row[1]) for row in rows]
-
-
-    def similarity_search_with_score(
-        self, query: str, k: int = 4
-    ) -> List[Tuple[Document, float]]:
-        """쿼리와 유사도 점수를 함께 반환"""
+       
+    def similarity_search_with_score( self, query: str, k: int = 4 ) -> List[Tuple[Document, float]]: 
+        """쿼리와 유사도 점수를 함께 반환""" 
+        query_emb = self.embedding_fn.embed_query(query) 
+        conn = self.db.get_connection() 
+        with conn.cursor() as cur: 
+            cur.execute( f""" 
+                        SELECT content, metadata, (1-(embedding <=> %s::vector)) AS score 
+                        FROM {self.table} ORDER BY score DESC LIMIT %s """
+                        , (query_emb, k)
+            )
+            rows = self.__get_unique_documents(cur.fetchall()) 
+            return [ (Document(page_content=row[0], metadata=row[1]), float(row[2])) for row in rows ]
+    
+    
+    def similarity_search_with_filter_score(self, query: str, k: int = 3,
+        filter: Optional[Dict[str, Any]] = None) -> List[Tuple[Document, float]]:
+        
         query_emb = self.embedding_fn.embed_query(query)
+        
+        
+        sql_query = f"""
+            SELECT content, metadata, (1 - (embedding <=> %s::vector)) AS score
+            FROM {self.table}
+        """
+        
+        # WHERE 절 조건 추가
+        params = [query_emb]
+        where_clauses = []
+
+        if filter:
+            filter_json = json.dumps(filter)
+            where_clauses.append("metadata @> %s::jsonb")
+            # 필터는 params의 앞쪽에 넣어야 SQL 순서와 맞음
+            params.append(filter_json)
+
+        if where_clauses:
+            sql_query += " WHERE " + " AND ".join(where_clauses)
+
+        # score에 따른 order
+        sql_query += " ORDER BY score DESC LIMIT %s"
+        params.append(k) 
+
+        # DB 연결 및 실행
         conn = self.db.get_connection()
         with conn.cursor() as cur:
-            cur.execute(
-                f"""
-                SELECT content, metadata, (1-(embedding <=> %s::vector)) AS score
-                FROM {self.table}
-                ORDER BY score DESC
-                LIMIT %s
-                """,
-                (query_emb, k),
-            )
+            cur.execute(sql_query, tuple(params))
             rows = self.__get_unique_documents(cur.fetchall())
-            
 
+        # 반환
         return [
             (Document(page_content=row[0], metadata=row[1]), float(row[2]))
             for row in rows
@@ -133,16 +156,19 @@ class CustomPGVector(VectorStore):
     
     def __get_unique_documents(self, rows):
         # 중복 제거를 위한 후처리
-        unique_contents = set()
+        unique_ids = set()
         unique_documents = []
         
         for row in rows:
-            content = row[0]
             metadata = row[1]
+            doc_id = metadata.get("id") if metadata else None
+        
+            # id가 없거나 이미 본 id면 스킵
+            if not doc_id or doc_id in unique_ids:
+                continue
             
-            if content not in unique_contents:
-                unique_contents.add(content)
-                unique_documents.append(row) # 중복이 아닐 때 원본 튜플을 저장
+            unique_ids.add(doc_id)
+            unique_documents.append(row) # 중복이 아닐 때 원본 튜플을 저장
 
         return unique_documents
 
@@ -172,12 +198,3 @@ def add_documents_to_pgvector(vectorstore, documents):
     except Exception as e:
         print(f"문서 추가 중 오류 발생: {e}")
         return False
-    
-    
-if __name__ == "__main__":
-    load_dotenv()
-    db =connect_DB()
-    chunks = make_chunk(db)
-    embeddings = set_embedding_model()
-    vectorstore = create_pgvector_store(db, embeddings)
-    add_documents_to_pgvector(vectorstore, chunks)

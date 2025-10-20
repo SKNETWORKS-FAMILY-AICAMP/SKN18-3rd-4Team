@@ -24,7 +24,7 @@ def create_document(conn):
 def make_chunk(db):
     conn = db.get_connection()
     recursive_text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=100, chunk_overlap=20
+    chunk_size=150, chunk_overlap=50
     )
     chunks = recursive_text_splitter.split_documents(create_document(conn))
     print(f"chunk 생성 -> {len(chunks)}개")

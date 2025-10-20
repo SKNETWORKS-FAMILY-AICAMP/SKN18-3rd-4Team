@@ -5,7 +5,7 @@ CREATE EXTENSION IF NOT EXISTS vector;
 CREATE TABLE FAQ_VECTORDB (
     id SERIAL PRIMARY KEY,
     content TEXT,                 -- 문서 내용
-    embedding VECTOR(1536),       -- 임베딩 크기에 맞춤
+    embedding VECTOR(3072),       -- 임베딩 크기에 맞춤 large 3072, small 1536
     metadata JSONB                -- 메타데이터
 );
 /*
