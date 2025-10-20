@@ -8,7 +8,7 @@ def search_question(vectorstore, query):
     for i, (doc, score) in enumerate(results, start=1):
         print(f"Rank {i}")
         print(f"Similarity: {score:.3f}")  # 소수점 3자리로 
-        print(f"ID: {doc.metadata.get('id')}, Table: {doc.metadata.get('table')}")
+        print(f"ID: {doc.metadata.get('id')}, Table: {doc.metadata.get('table')}, Category: {doc.metadata.get('category')}")
         print(f"Content: {doc.page_content}") 
         print("="*80)
 
@@ -17,5 +17,5 @@ if __name__ == "__main__":
     db =connect_DB()
     embeddings = set_embedding_model()
     vectorstore = create_pgvector_store(db, embeddings)
-    query = "정수기 전원이 안켜져요" # 질문 검색
+    query = "공기청정기가 잘 작동하다가 동작을 안해요" # 질문 검색
     search_question(vectorstore, query)
