@@ -1,4 +1,4 @@
-from vetordb.set_model import set_classify_model
+from vectordb.set_model import set_classify_model
 from langchain.schema import HumanMessage
 
 
@@ -11,14 +11,25 @@ def classify_category(question: str) -> str:
         "가스오븐", "레인지후드", "식기세척기", "음식물처리기", "전자레인지", "전기오븐"
         ]
     prompt = f"""
-                다음 고객 질문이 어떤 가전제품에 대한 것인지 가장 적절한 카테고리를 선택해줘.
-                만약 특정 카테고리에 속하지 않으면 '기타'라고 대답해줘.
+                다음 고객 질문이 어떤 가전제품에 해당하는지 판단하세요.
+                - 질문이 여러 카테고리에 해당하면 모두 선택하세요.
+                - 관련 없는 질문은 '기타'라고 답하세요.
+                - 카테고리 이름만 쉼표로 구분해서 출력하세요.
+                
+                예시:
+                    - "공기청정기 필터를 교체하려면?" → 공기청정기
+                    - "요금 납부 방법이 궁금해요" → 요금납부
+                    - "필터 청소 방법 알려줘" → 기타
+                    - "식기세척기와 공기청정기가 전원이 안켜져요" → 식기세척기, 공기청정기
+
+                
                 카테고리 후보: {', '.join(CATEGORIES)}
 
                 질문: "{question}"
-
-                출력 형식: 카테고리 이름만 출력
             """
     chat_model = set_classify_model() 
     res = chat_model.invoke([HumanMessage(content=prompt)])
-    return res.content.strip()
+    # 쉼표로 분리, 공백 제거, 기타 제거
+    categories = [c.strip() for c in res.content.split(",") if c.strip() != "기타"]
+
+    return categories

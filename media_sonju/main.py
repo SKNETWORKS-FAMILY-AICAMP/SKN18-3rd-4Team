@@ -1,10 +1,10 @@
-from vetordb.connect_db import connect_DB
-from vetordb.split_chunk import make_chunk
-from vetordb.set_model import set_embedding_model
-from vetordb.pgvector import create_pgvector_store, add_documents_to_pgvector
+from vectordb.connect_db import connect_DB
+from vectordb.split_chunk import make_chunk
+from vectordb.set_model import set_embedding_model
+from vectordb.pgvector import create_pgvector_store, add_documents_to_pgvector
 from dotenv import load_dotenv
-from vetordb.search_query import search_question
-
+from vectordb.search_query import search_question
+from vectordb.chat import build_context,chat_llm
        
 def create_faq_vectordb(db, vectorstore):
     chunks = make_chunk(db)
@@ -14,7 +14,8 @@ def create_faq_vectordb(db, vectorstore):
     
 def search(vectorstore):
     query = input(f"궁금한 점을 입력하세요: ")# 질문 검색
-    search_question(vectorstore, query)
+    all_results = search_question(vectorstore, query)
+    chat_llm(build_context(all_results), query)
     
     
 if __name__ == "__main__":
@@ -24,4 +25,5 @@ if __name__ == "__main__":
     vectorstore = create_pgvector_store(db, embeddings)
     #create_faq_vectordb(db,vectorstore) #<- 처음 한번 실행
     search(vectorstore)
+
 

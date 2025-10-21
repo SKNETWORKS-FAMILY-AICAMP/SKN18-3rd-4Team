@@ -115,7 +115,7 @@ class CustomPGVector(VectorStore):
     
     
     def similarity_search_with_filter_score(self, query: str, k: int = 3,
-        filter: Optional[Dict[str, Any]] = None) -> List[Tuple[Document, float]]:
+        categories: Optional[List[str]] = None) -> List[Tuple[Document, float]]:
         
         query_emb = self.embedding_fn.embed_query(query)
         
@@ -129,15 +129,17 @@ class CustomPGVector(VectorStore):
         params = [query_emb]
         where_clauses = []
 
-        if filter:
-            filter_json = json.dumps(filter)
-            where_clauses.append("metadata @> %s::jsonb")
-            # 필터는 params의 앞쪽에 넣어야 SQL 순서와 맞음
-            params.append(filter_json)
+        if categories:
+            # OR 조건 생성
+            or_clauses = []
+            for cat in categories:
+                or_clauses.append("metadata->>%s = %s")
+                params.extend(["category", cat])
+            where_clauses.append("(" + " OR ".join(or_clauses) + ")")
 
-        if where_clauses:
+        if where_clauses: 
             sql_query += " WHERE " + " AND ".join(where_clauses)
-
+            
         # score에 따른 order
         sql_query += " ORDER BY score DESC LIMIT %s"
         params.append(k) 
@@ -159,7 +161,7 @@ class CustomPGVector(VectorStore):
         unique_ids = set()
         unique_documents = []
         
-        for row in rows:
+        for row in rows:     
             metadata = row[1]
             doc_id = metadata.get("id") if metadata else None
         

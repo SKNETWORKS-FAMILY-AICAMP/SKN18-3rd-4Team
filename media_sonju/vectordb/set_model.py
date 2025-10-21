@@ -20,3 +20,12 @@ def set_classify_model():
         temperature=0
     )
     return classify_model
+
+# 답변 모델델
+def set_llm_model():
+    chat_model = ChatOpenAI(
+        model = "gpt-5-nano",    # OpenAI 제공하는 모델명 
+        openai_api_key = set_openapi(),
+        reasoning_effort="high"
+    )
+    return chat_model

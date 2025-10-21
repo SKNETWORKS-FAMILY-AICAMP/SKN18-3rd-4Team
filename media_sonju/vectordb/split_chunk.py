@@ -11,7 +11,8 @@ def create_document(conn):
             metadata={
                 "table":"skmagic_faq",
                 "id": row["id"],# 테이블의 id 컬럼
-                "category": row["sub_category"]   
+                "category": row["sub_category"],
+                'image_url': row["images"]   
             }
         )
     for _, row in df.iterrows()

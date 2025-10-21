@@ -1,7 +1,7 @@
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.messages import SystemMessage
 from langchain_core.prompts import HumanMessagePromptTemplate
-from set_model import set_llm_model
+from .set_model import set_llm_model
 
 def build_context(all_results):
     context_parts = []

@@ -4,6 +4,7 @@ jupyter==1.1.1
 # vectordb 구축
 pandas==2.3.2 
 langchain-openai==0.3.8
+langchain==0.3.27
 
 # DB연결용
 python-dotenv==1.1.1
