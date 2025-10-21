@@ -2,16 +2,21 @@ from langchain.prompts import ChatPromptTemplate
 from langchain_core.messages import SystemMessage
 from langchain_core.prompts import HumanMessagePromptTemplate
 from .set_model import set_llm_model
+# import json
 
 def build_context(all_results):
     context_parts = []
-    for category, docs in all_results.items():
+    domain = all_results.get("도메인")
+    context_parts.append(f"도메인: {domain}\n")
+    results = all_results["results"]
+    for category, docs in results.items():
         context_parts.append(f"### {category}관련 문서 ###")
-        for doc, _ in docs:
+        for doc, score in docs:
             context_parts.append(f"- {doc.page_content.strip()}")
-
-    return "\n".join(context_parts)
-
+           
+    
+    context =  "\n".join(context_parts)
+     
 
 def chat_llm(context,query):
     prompt_template = f"""

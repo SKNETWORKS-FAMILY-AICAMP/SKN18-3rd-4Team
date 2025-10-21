@@ -13,9 +13,14 @@ def create_faq_vectordb(db, vectorstore):
     
     
 def search(vectorstore):
-    query = input(f"궁금한 점을 입력하세요: ")# 질문 검색
-    all_results = search_question(vectorstore, query)
-    chat_llm(build_context(all_results), query)
+    while True:
+        query = input(f"궁금한 점을 입력하세요: ")# 질문 검색
+        all_results = search_question(vectorstore, query)
+        if not all_results:
+            continue
+    
+        chat_llm(build_context(all_results), query)
+        break
     
     
 if __name__ == "__main__":
