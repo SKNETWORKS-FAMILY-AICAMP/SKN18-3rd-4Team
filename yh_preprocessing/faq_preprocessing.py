@@ -18,11 +18,11 @@ def clean_table_markdown(table_markdown):
 
     table_text = str(table_markdown).strip()
 
-    # 2. [표N] 제거
-    # table_text = re.sub(r'\[표\d+\]', '', table_text).strip()
+    # 연속된 줄바꿈 정리 (\n\n → \n)
+    table_text = re.sub(r'\n\n+', '', table_text)
 
-    # 3. 연속된 줄바꿈 정리 (\n\n → \n)
-    table_text = re.sub(r'\n\n+', '\n', table_text)
+    # 큰따옴표 및 쉼표 제거
+    table_text = re.sub(r'[\"“”‟〝〞＂,]', '', table_text)
 
     return table_text
 
@@ -55,6 +55,7 @@ def clean_text(text):
         r'✅',
         r'⭐',
     ]
+
     for pattern in service_phrases:
         text = re.sub(pattern, '', text, flags=re.DOTALL)
 
@@ -112,18 +113,46 @@ def preprocess_data(df):
     # 3. 빈 텍스트 제거
     print("3. 빈 텍스트 제거 중...")
     before = len(df)
-    df = df[df['text'].notna() & (df['text'].str.strip() != '')]
+    empty_text_mask = df['text'].isna() | (df['text'].str.strip() == '')
+    empty_rows = df[empty_text_mask]
+    df = df[~empty_text_mask]
     after = len(df)
     print(f"   제거된 행: {before - after}개")
 
+    if len(empty_rows) > 0:
+        print("\n   [제거된 빈 텍스트 데이터]")
+        for idx, row in empty_rows.iterrows():
+            print(f"   - 인덱스 {idx}: 제목='{row['title']}'")
+
     # 4. 중복 제거
-    print("4. 중복 제거 중...")
+    print("\n4. 중복 제거 중...")
     before = len(df)
+
+    # 전체 중복 찾기
+    duplicated_full_mask = df.duplicated(keep='first')
+    duplicated_full = df[duplicated_full_mask]
+
+    # text 기준 중복 찾기 (전체 중복 제거 후)
     df = df.drop_duplicates()
-    after_full = len(df)
+    duplicated_text_mask = df.duplicated(subset=['text'], keep='first')
+    duplicated_text = df[duplicated_text_mask]
+
     df = df.drop_duplicates(subset=['text'])
-    after_text = len(df)
-    print(f"   전체 중복 제거: {before - after_text}개")
+    after = len(df)
+    print(f"   전체 중복 제거: {len(duplicated_full)}개")
+    print(f"   text 중복 제거: {len(duplicated_text)}개")
+    print(f"   총 제거된 행: {before - after}개")
+
+    if len(duplicated_full) > 0:
+        print("\n   [제거된 전체 중복 데이터 (최대 50개)]")
+        for idx, row in duplicated_full.head(50).iterrows():
+            print(f"   - 인덱스 {idx}: 제목='{row['title'][:50]}...'")
+
+    if len(duplicated_text) > 0:
+        print("\n   [제거된 text 중복 데이터 (최대 50개)]")
+        for idx, row in duplicated_text.head(50).iterrows():
+            print(f"   - 인덱스 {idx}: 제목='{row['title'][:50]}...'")
+            print(f"     내용='{row['text'][:80]}...'")
 
     return df
 
@@ -148,7 +177,8 @@ def main():
     print("=" * 60)
 
     script_dir = Path(__file__).parent
-    input_folder = script_dir.parent / "yh_faq_crawling" / "skmagic_faq_data"
+    #skmagic_faq_table_in_text , skmagic_faq_split_cols, skmagic_faq_with_tags
+    input_folder = script_dir.parent / "yh_faq_crawling" / "skmagic_faq_table_in_text" 
     df_original = load_csv_files(input_folder)
 
     print_statistics(df_original, "전처리 전 통계")
@@ -167,7 +197,7 @@ def main():
           f"{df_processed['text'].str.len().mean():.2f} "
           f"({df_processed['text'].str.len().mean() - df_original['text'].str.len().mean():.2f})")
 
-    output_file = script_dir / "skmagic_faq_preprocessed.csv"
+    output_file = script_dir / "skmagic_faq_preprocessedtable_in_text.csv"
     df_processed.to_csv(output_file, index=False, encoding='utf-8-sig')
 
     print("\n전처리 완료!")
