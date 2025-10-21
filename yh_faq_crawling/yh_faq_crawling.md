@@ -36,8 +36,10 @@ playwright install chromium
 
 ```
 faq_crawling/
-├── faq_crawling.py  # 메인 크롤링 스크립트
-└── skmagic_faq_data/                      # 크롤링 결과 저장 폴더 (자동 생성)
+├── faq_crawling_table_in_md.py        # 표를 별도 컬럼으로 분리
+├── faq_crawling_with_tags.py          # title, text, table_markdown, image (text에 표와 이미지는 tag로)
+├── faq_crawling_split_cols.py         # title, text, table_markdown, image
+└── skmagic_faq_*/                     # 크롤링 결과 저장 폴더 (자동 생성)
     ├── 정수기_서브카테고리1.csv
     ├── 정수기_서브카테고리2.csv
     └── ...
