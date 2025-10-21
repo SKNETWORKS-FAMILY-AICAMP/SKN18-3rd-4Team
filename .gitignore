@@ -1,7 +1,5 @@
 .venv/
 
-*data/
-data/
 .csv
 
 __pycache__/
@@ -14,6 +12,3 @@ env/
 
 git-cmd.md
 README.md
-
-/yh_faq_crawling
-/yh_preprocessing
