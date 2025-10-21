@@ -40,9 +40,9 @@ def clean_text(text):
     for char in special_chars:
         text = text.replace(char, '')
 
-    # 3. 고객상담센터 및 연락처 정보 제거
-    text = re.sub(r'[^\n.!?]*\[고객상담센터[^\]]*\][^\n.!?]*[.!?\n]?', '', text)
-    text = re.sub(r'[^\n.!?]*1600\-1661[^\n.!?]*[.!?\n]?', '', text)
+    # # 3. 고객상담센터 및 연락처 정보 제거
+    # text = re.sub(r'[^\n.!?]*\[고객상담센터[^\]]*\][^\n.!?]*[.!?\n]?', '', text)
+    # text = re.sub(r'[^\n.!?]*1600\-1661[^\n.!?]*[.!?\n]?', '', text)
 
     # 4. 서비스 안내 문구 제거
     service_phrases = [
@@ -197,7 +197,7 @@ def main():
           f"{df_processed['text'].str.len().mean():.2f} "
           f"({df_processed['text'].str.len().mean() - df_original['text'].str.len().mean():.2f})")
 
-    output_file = script_dir / "skmagic_faq_preprocessedtable_in_text.csv"
+    output_file = script_dir / "skmagic_faq_preprocessed_table_in_text.csv"
     df_processed.to_csv(output_file, index=False, encoding='utf-8-sig')
 
     print("\n전처리 완료!")
