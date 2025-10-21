@@ -39,6 +39,9 @@ faq_crawling/
 ├── faq_crawling_table_in_md.py        # 표를 별도 컬럼으로 분리
 ├── faq_crawling_with_tags.py          # title, text, table_markdown, image (text에 표와 이미지는 tag로)
 ├── faq_crawling_split_cols.py         # title, text, table_markdown, image
+├── faq_crawling_table_in_text.py      # 표를 텍스트 끝에 추가()
+├── faq_crawling_table_in_order.py     # 표를 본문 순서대로 (이미지 컬럼 유지)
+├── faq_crawling_in_order.py           # 모든 콘텐츠를 순서대로 (이미지 컬럼 없음)
 └── skmagic_faq_*/                     # 크롤링 결과 저장 폴더 (자동 생성)
     ├── 정수기_서브카테고리1.csv
     ├── 정수기_서브카테고리2.csv
