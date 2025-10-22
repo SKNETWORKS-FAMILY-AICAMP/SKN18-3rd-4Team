@@ -44,7 +44,7 @@ class CustomPGVector(VectorStore):
         finally:
             self.db.put_connection(conn)
     
-    def similarity_search(self, query: str, k: int = 4,
+    def similarity_search(self, query: str, k: int = 5,
                           filter: Optional[Dict[str, Any]] = None) -> List[Document]:
         
         query_emb = self.embedding_fn.embed_query(query)
@@ -100,7 +100,7 @@ class CustomPGVector(VectorStore):
 
         return [Document(page_content=row[0], metadata=row[1]) for row in rows]
        
-    def similarity_search_with_score( self, query: str, k: int = 4 ) -> List[Tuple[Document, float]]: 
+    def similarity_search_with_score( self, query: str, k: int = 5 ) -> List[Tuple[Document, float]]: 
         """쿼리와 유사도 점수를 함께 반환""" 
         query_emb = self.embedding_fn.embed_query(query) 
         conn = self.db.get_connection() 
@@ -114,7 +114,7 @@ class CustomPGVector(VectorStore):
             return [ (Document(page_content=row[0], metadata=row[1]), float(row[2])) for row in rows ]
     
     
-    def similarity_search_with_filter_score(self, query: str, k: int = 3,
+    def similarity_search_with_filter_score(self, query: str, k: int = 5,
         categories: Optional[List[str]] = None) -> List[Tuple[Document, float]]:
         
         query_emb = self.embedding_fn.embed_query(query)
@@ -157,22 +157,18 @@ class CustomPGVector(VectorStore):
         ]
     
     def __get_unique_documents(self, rows):
-        # 중복 제거를 위한 후처리
-        unique_ids = set()
+        unique_contents = set()
         unique_documents = []
         
-        for row in rows:     
+        for row in rows:
+            content = row[0]
             metadata = row[1]
-            doc_id = metadata.get("id") if metadata else None
-        
-            # id가 없거나 이미 본 id면 스킵
-            if not doc_id or doc_id in unique_ids:
-                continue
             
-            unique_ids.add(doc_id)
-            unique_documents.append(row) # 중복이 아닐 때 원본 튜플을 저장
+            if content not in unique_contents:
+                unique_contents.add(content)
+                unique_documents.append(row) # 중복이 아닐 때 원본 튜플을 저장
 
-        return unique_documents
+        return unique_documents # 중복 제거된 리스트 반환
 
 
 def create_pgvector_store(db, embeddings, collection_name: str = "faq_vectordb"):
