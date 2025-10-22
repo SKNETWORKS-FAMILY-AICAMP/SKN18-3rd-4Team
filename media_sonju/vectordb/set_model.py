@@ -39,3 +39,12 @@ def set_score_model():
         
     )
     return chat_model
+
+# 검증 모델
+def set_validate_model():
+    validate_model = ChatOpenAI(
+        model = "gpt-4o-mini",
+        openai_api_key = set_openapi(),
+        temperature=0
+    )
+    return validate_model
