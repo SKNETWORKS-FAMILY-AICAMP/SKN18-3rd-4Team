@@ -3,15 +3,12 @@ from langchain_openai import ChatOpenAI
 from .utils import set_openapi
 # from dotenv import load_dotenv
 
-
-# embedding 모델 설정
 def set_embedding_model():
     embedding_model = OpenAIEmbeddings(
         model = "text-embedding-3-large",    # OpenAI 제공하는 모델명 
         openai_api_key = set_openapi()                                                        
     )
     return embedding_model
-
 # 분류 모델
 def set_classify_model():
     classify_model = ChatOpenAI(

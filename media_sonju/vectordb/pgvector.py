@@ -127,19 +127,15 @@ class CustomPGVector(VectorStore):
         
         # WHERE 절 조건 추가
         params = [query_emb]
-        where_clauses = []
 
         if categories:
-            # OR 조건 생성
+            print(categories)
             or_clauses = []
             for cat in categories:
-                or_clauses.append("metadata->>%s = %s")
-                params.extend(["category", cat])
-            where_clauses.append("(" + " OR ".join(or_clauses) + ")")
+                or_clauses.append("metadata->>'category' = %s")
+                params.append(cat)
+            sql_query += " WHERE " + " OR ".join(or_clauses)
 
-        if where_clauses: 
-            sql_query += " WHERE " + " AND ".join(where_clauses)
-            
         # score에 따른 order
         sql_query += " ORDER BY score DESC LIMIT %s"
         params.append(k) 
@@ -170,7 +166,6 @@ class CustomPGVector(VectorStore):
 
         return unique_documents # 중복 제거된 리스트 반환
 
-
 def create_pgvector_store(db, embeddings, collection_name: str = "faq_vectordb"):
     """PGVector 스토어 생성"""
     try:
@@ -184,6 +179,7 @@ def create_pgvector_store(db, embeddings, collection_name: str = "faq_vectordb")
     except Exception as e:
         print(f"PGVector 스토어 생성 중 오류: {e}")
         return None
+
     
     
 def add_documents_to_pgvector(vectorstore, documents):

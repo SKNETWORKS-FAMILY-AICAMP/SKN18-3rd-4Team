@@ -1,10 +1,8 @@
 import os
 from urllib.parse import urlparse
-from .Check_Singleton import SingletonDatabase
-# from dotenv import load_dotenv
+from vectordb.Singleton import SingletonDatabase
 
-def connect_DB(connect_str="CONNECTION_STRING") -> dict:
-    #load_dotenv()
+def connect_DB(connect_str="CONNECTION_STRING"):
     conn_url = os.getenv(connect_str)
     url = urlparse(conn_url)
     config = { "host": url.hostname, 

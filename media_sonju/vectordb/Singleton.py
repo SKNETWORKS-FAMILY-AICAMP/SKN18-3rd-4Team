@@ -1,8 +1,7 @@
-import psycopg2 # python에서 PostgreSQL 데이터베이스에 연결하기 위한 라이브러리
-from psycopg2 import pool # 여러 DB 연결을 효율적으로 관리하기 위한 Connection Pool 제공 모듈
+import psycopg2 
+from psycopg2 import pool 
 
 
-# 1. 싱글톤 패턴 정의
 def singleton(class_):
 	instances = {} # 각 클래스별로 이미 생성된 인스턴스를 저장해두는 역할
     
