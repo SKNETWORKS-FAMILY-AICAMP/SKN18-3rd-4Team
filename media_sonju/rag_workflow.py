@@ -19,12 +19,12 @@ def create_self_rag_workflow(vectorstore):
     
     # 노드 추가
     workflow.add_node("classify", decide_classify_category)
-    workflow.add_node("unsupported", unsupported_node)
+    workflow.add_node("unsupported_node", unsupported_node)
     workflow.add_node("search", search_node)
     workflow.add_node("evaluate_relevance", evaluate_relevance)
     workflow.add_node("build_context",build_context)
-    workflow.add_node("tech_agent",tech_chat_llm)
-    workflow.add_node("customer_agent",customer_chat_llm)
+    workflow.add_node("Tech",tech_chat_llm)
+    workflow.add_node("Customer",customer_chat_llm)
 
     
     # 엣지 추가
@@ -35,7 +35,7 @@ def create_self_rag_workflow(vectorstore):
         "classify",
         should_question,
         {
-            "retrieve": "unsupported",
+            "retrieve": "unsupported_node",
             "generate": "search"
         }
     )
@@ -44,7 +44,7 @@ def create_self_rag_workflow(vectorstore):
         "evaluate_relevance",
         should_question,
         {
-            "retrieve": "unsupported",
+            "retrieve": "unsupported_node",
             "generate": "build_context"
         }
     )
@@ -53,19 +53,19 @@ def create_self_rag_workflow(vectorstore):
         "build_context",
         classify_agent,
         {
-            "Tech": "tech_agent",
-            "Customer": "customer_agent"
+            "Tech": "Tech",
+            "Customer": "Customer"
         }
     )
     
     # 검색/분류 경로
-    workflow.add_edge("unsupported", "classify")
+    workflow.add_edge("unsupported_node", "classify")
     
     
     # 공통 경로
     workflow.add_edge("search", "evaluate_relevance")
-    workflow.add_edge("tech_agent", END)
-    workflow.add_edge("customer_agent", END)
+    workflow.add_edge("Tech", END)
+    workflow.add_edge("Customer", END)
 
     
     # 워크플로우 컴파일
