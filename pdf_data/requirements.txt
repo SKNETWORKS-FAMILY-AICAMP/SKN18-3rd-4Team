@@ -1,0 +1,12 @@
+playwright
+beautifulsoup4
+chromium
+pandas
+
+## pdf읽는 라이브러리
+## PyMuPDF4LLM
+pymupdf4llm==0.0.27
+pymupdf==1.26.5
+
+# pdf 구조 확인용 
+poppler-utils==0.1.0
