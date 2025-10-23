@@ -12,7 +12,8 @@ def run_self_rag(self_rag_app, question: str, verbose: bool = True):
     # 초기 상태 설정
     initial_state = {
         "question": question,
-        "need_retrieval": False,
+        "need_quit": False,
+        "retrieval_question":False,
         "domain": "",
         "category":[],
         "message":"",
