@@ -28,7 +28,7 @@ services:
 
     healthcheck:
       # PostgreSQL이 정상적으로 실행 중인지 확인
-      test: ["CMD-SHELL", "pg_isready -U admin"]  # admin 계정으로 접속 테스트
+      test: ["CMD-SHELL", "pg_isready -U skmagic"]  # skmagic 계정으로 접속 테스트
       interval: 10s    # 10초마다 헬스체크
       timeout: 5s      # 응답이 5초 안에 없으면 실패로 간주
       retries: 5       # 5회 시도 후에도 실패하면 unhealthy 상태로 표시
