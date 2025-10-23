@@ -1,9 +1,8 @@
 """
 run_pdf_pipeline.py
 --------------------
-📦 실행 한 번으로 아래 순서 자동 수행:
 1️⃣ 중복 PDF 제거
-2️⃣ PDF → Markdown → CSV 변환
+2️⃣ PDF → Markdown → CSV (sub_category 포함)
 """
 
 import os
@@ -17,17 +16,17 @@ from typing import Iterable
 
 
 # =========================================================
-# ① 중복 PDF 제거 로직 (from 중복데이터제거.py)
+# ① 중복 PDF 제거
 # =========================================================
 def remove_duplicate_pdfs(base_dir: str):
-    """폴더 내 (2), (3) 중복 PDF 자동 삭제"""
     dup_pattern = re.compile(r"^(?P<name>.+?)\s*\(\d+\)\.pdf$", re.IGNORECASE)
     removed_count = 0
 
     for root, _, files in os.walk(base_dir):
-        pdfs = [f for f in files if f.lower().endswith(".pdf")]
+        for filename in files:
+            if not filename.lower().endswith(".pdf"):
+                continue
 
-        for filename in pdfs:
             match = dup_pattern.match(filename)
             if not match:
                 continue
@@ -47,10 +46,9 @@ def remove_duplicate_pdfs(base_dir: str):
 
 
 # =========================================================
-# ② PDF → CSV 변환 로직 (from pdftocsv.py)
+# ② PDF → CSV 변환 (sub_category 포함)
 # =========================================================
 def clean_markdown(md_text: str) -> str:
-    """Markdown 텍스트를 RAG/CSV용으로 강하게 정제"""
     md_text = re.sub(r"!\[.*?\]\(.*?\)", "", md_text)
     md_text = re.sub(r"^\|.*?\|$", "", md_text, flags=re.MULTILINE)
     md_text = re.sub(r"[#*_>`~]+", " ", md_text)
@@ -68,12 +66,10 @@ def clean_markdown(md_text: str) -> str:
 
 
 def _convert_pdf_to_md(path_str: str):
-    """서브프로세스에서 실행할 PDF→Markdown 변환"""
     return pymupdf4llm.to_markdown(path_str)
 
 
 def safe_to_markdown(pdf_path: str, timeout: int = 300) -> str | None:
-    """별도 프로세스로 실행하여 timeout 넘으면 강제 종료"""
     ctx = multiprocessing.get_context("spawn")  # Windows 호환
     with ctx.Pool(processes=1) as pool:
         result = pool.apply_async(_convert_pdf_to_md, (pdf_path,))
@@ -90,8 +86,37 @@ def iter_pdf_files(root: pathlib.Path) -> Iterable[pathlib.Path]:
     return root.rglob("*.pdf")
 
 
+def get_sub_category(pdf_path: pathlib.Path, pdf_root: pathlib.Path) -> str:
+    """
+    PDF 폴더 기준 2단계 하위 폴더명을 sub_category로 반환.
+    예:
+      data/PDF/식기세척기/가스오븐레인지/매뉴얼.pdf → 가스오븐레인지
+      data/PDF/식기세척기/매뉴얼.pdf → 식기세척기
+    """
+    try:
+        rel = pdf_path.relative_to(pdf_root)
+        parts = rel.parts
+
+        # 0: 최상위 PDF
+        # 1: 1차 카테고리 (식기세척기)
+        # 2: 2차 카테고리 (가스오븐레인지)
+        # 3: 그 이후는 무시 (날짜, 버전 등)
+        if len(parts) >= 3:
+            sub = parts[1]  # 1차
+            candidate = parts[2]  # 2차
+            # “제품사용설명서”, “Ver”, “2020” 등은 제외
+            if re.search(r"(제품|사용설명서|Ver|버전|20\d{2}|\d{4}\.\d{2}\.\d{2})", candidate, re.I):
+                return sub
+            return candidate
+        elif len(parts) >= 2:
+            return parts[1]
+    except Exception:
+        pass
+    return "기타"
+
+
+
 def convert_all_pdfs_to_single_csv(pdf_root: pathlib.Path, output_csv_path: pathlib.Path):
-    """PDF 전체를 순회하며 텍스트가 충분한 문서만 CSV로 저장"""
     if not pdf_root.exists():
         raise FileNotFoundError(f"PDF 폴더를 찾을 수 없습니다: {pdf_root}")
 
@@ -102,11 +127,13 @@ def convert_all_pdfs_to_single_csv(pdf_root: pathlib.Path, output_csv_path: path
 
     with open(output_csv_path, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.writer(f, quoting=csv.QUOTE_ALL)
-        writer.writerow(["title", "text"])
+        # ✅ sub_category 컬럼 추가
+        writer.writerow(["sub_category", "title", "text"])
 
         for pdf_file in iter_pdf_files(pdf_root):
             total += 1
             title = pdf_file.stem
+            sub_category = get_sub_category(pdf_file, pdf_root)
 
             if title in seen_titles:
                 skipped += 1
@@ -116,7 +143,7 @@ def convert_all_pdfs_to_single_csv(pdf_root: pathlib.Path, output_csv_path: path
             try:
                 doc = pymupdf.open(str(pdf_file))
                 page_count = len(doc)
-                print(f"[📄 {pdf_file.name}] 총 {page_count}페이지 처리 중...")
+                print(f"[📄 {pdf_file.name}] ({sub_category}) 총 {page_count}페이지 처리 중...")
 
                 # ---- 텍스트 밀도 체크 ----
                 sample_text = ""
@@ -131,7 +158,6 @@ def convert_all_pdfs_to_single_csv(pdf_root: pathlib.Path, output_csv_path: path
                           f"(샘플텍스트 {text_len}자, 평균 {avg_text_per_page:.1f}/페이지)")
                     continue
 
-                # ---- 프로세스 타임아웃 변환 ----
                 print(f"   → 텍스트 충분함 ({text_len}자), 변환 시작 (최대 300초 제한)")
                 md_text = safe_to_markdown(str(pdf_file), timeout=300)
                 if not md_text:
@@ -142,10 +168,10 @@ def convert_all_pdfs_to_single_csv(pdf_root: pathlib.Path, output_csv_path: path
                     print(f"⚠️ [빈 텍스트 건너뜀] {pdf_file.name}")
                     continue
 
-                writer.writerow([title, cleaned])
+                writer.writerow([sub_category, title, cleaned])
                 seen_titles.add(title)
                 success += 1
-                print(f"✅ [{title}] 변환 완료")
+                print(f"✅ [{title}] ({sub_category}) 변환 완료")
 
             except Exception as e:
                 print(f"⚠️ [오류 건너뜀] {pdf_file.name} ({e})")
@@ -155,15 +181,14 @@ def convert_all_pdfs_to_single_csv(pdf_root: pathlib.Path, output_csv_path: path
 
 
 # =========================================================
-# ③ 전체 파이프라인 실행
+# ③ 전체 실행
 # =========================================================
 if __name__ == "__main__":
     base_dir = pathlib.Path(__file__).resolve().parent
-    pdf_root_dir = base_dir.parent / "data" / "PDF"       # ✅ 한 단계 위로 이동
-    results_root_dir = base_dir.parent / "data" / "csv"   # ✅ 결과 csv도 data 밑에 저장
+    pdf_root_dir = base_dir.parent / "data" / "PDF"
+    results_root_dir = base_dir.parent / "data" / "csv"
     results_root_dir.mkdir(parents=True, exist_ok=True)
     all_csv_path = results_root_dir / "all_pdfs.csv"
-
 
     print("🚀 [1단계] 중복 PDF 제거 시작...")
     remove_duplicate_pdfs(str(pdf_root_dir))
