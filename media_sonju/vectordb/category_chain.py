@@ -69,14 +69,3 @@ def unsupported_node(state: SelfRAGState) -> SelfRAGState:
     new_question = input("질문을 입력해주세요: ")  # 또는 UI단에서 입력 받음
     state["question"] = new_question
     return state
-
-'''
-if __name__ == "__main__":
-    state = {
-        "question": "못생겼어"
-    }
-
-    res = decide_classify_category(state)
-
-    print(res)
-'''
