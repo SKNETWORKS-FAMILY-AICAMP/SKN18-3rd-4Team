@@ -11,7 +11,7 @@ def create_self_rag_workflow(vectorstore):
     
     # StateGraph 생성
     workflow = StateGraph(SelfRAGState)
-   
+
     # search 노드: 래퍼 함수 사용 (partial 대신 안전)
     def search_node(state: SelfRAGState):
         return search_question(state, vectorstore=vectorstore)
@@ -24,6 +24,7 @@ def create_self_rag_workflow(vectorstore):
     workflow.add_node("build_context",build_context)
     workflow.add_node("Tech",tech_chat_llm)
     workflow.add_node("Customer",customer_chat_llm)
+
 
     
     # 엣지 추가
@@ -57,9 +58,11 @@ def create_self_rag_workflow(vectorstore):
         }
     )
     
+
+
     # 검색/분류 경로
     workflow.add_edge("unsupported_node", "classify")
-    
+
     
     # 공통 경로
     workflow.add_edge("search", "evaluate_relevance")
