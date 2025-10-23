@@ -48,7 +48,18 @@ def chat_llm(context,query):
 
     # 답변 검증
     validation_result = validate_answer(query, response.content)
-    
+
+    # 검증 결과 출력 추가
+    print("\n" + "="*60)
+    print("답변 검증 결과")
+    print("="*60)
+    print(f"✓ 질문 유효성: {'통과' if validation_result['is_question_valid'] else '실패'}")
+    print(f"  └─ 피드백: {validation_result['question_feedback']}")
+    print(f"\n✓ 답변 점수: {validation_result['score']}/5.0 (기준: {validation_result['threshold']}점 이상)")
+    print(f"  └─ 피드백: {validation_result['answer_feedback']}")
+    print(f"\n✓ 최종 판정: {'✅ 통과' if validation_result['is_valid'] else '❌ 실패 (재검색 필요)'}")
+    print("="*60 + "\n")
+
     if validation_result["is_valid"]:
         return response.content
     else:

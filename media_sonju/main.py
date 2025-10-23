@@ -14,7 +14,7 @@ def create_faq_vectordb(db, vectorstore):
     
 def search(vectorstore):
     while True:
-        query = input(f"궁금한 점을 입력하세요: ")# 질문 검색
+        query = input(f"궁금한 점을 입력하세요: ") # 질문 검색
         all_results = search_question(vectorstore, query)
         if not all_results:
             continue
@@ -25,7 +25,7 @@ def search(vectorstore):
     
 if __name__ == "__main__":
     load_dotenv()
-    db =connect_DB()
+    db = connect_DB()
     embeddings = set_embedding_model()
     vectorstore = create_pgvector_store(db, embeddings)
     #create_faq_vectordb(db,vectorstore) #<- 처음 한번 실행
