@@ -71,3 +71,10 @@ def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
         "relevant_docs":relevant_docs,
         "relevance_scores": avg_relevance
     }
+    
+def should_evaluate_relevance(state: SelfRAGState)-> str:
+    """검색 필요성에 따라 다음 단계를 결정하는 조건부 함수"""
+    if state["need_retrieval"]:
+        return "unsupported_node"
+    else:
+        return "build_context"

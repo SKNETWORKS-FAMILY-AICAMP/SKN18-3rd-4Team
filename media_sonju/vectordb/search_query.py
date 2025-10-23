@@ -3,7 +3,7 @@ from initial_state import SelfRAGState
 def search_question(state:SelfRAGState,vectorstore) -> SelfRAGState:
     
     domain = state.get("domain")
-    categories = state.get("sub_category")
+    categories = state.get("category")
     query = state.get("question")  
     all_results = {}  
     if categories:
@@ -11,7 +11,7 @@ def search_question(state:SelfRAGState,vectorstore) -> SelfRAGState:
                 print(f"{cat} 유사도 검색 시작")
                 results = vectorstore.similarity_search_with_filter_score(query=query, 
                                         k=5, categories=cat) # Cosine 유사도 기반으로 계산-> 높을 수록 좋음
-                print(results)
+                #print(results)
                 all_results[cat] = results
                 print_from(results)
     else:

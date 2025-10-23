@@ -129,7 +129,9 @@ class CustomPGVector(VectorStore):
         params = [query_emb]
 
         if categories:
-            print(categories)
+            if isinstance(categories, str):
+                categories = [categories]
+            #print(categories)
             or_clauses = []
             for cat in categories:
                 or_clauses.append("metadata->>'category' = %s")

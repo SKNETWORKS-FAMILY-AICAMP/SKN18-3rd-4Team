@@ -1,4 +1,4 @@
-from typing import List, Dict, Any, Optional, TypedDict, Tuple
+from typing import List, Dict, Any, TypedDict, Tuple
 
 
 class SelfRAGState(TypedDict):

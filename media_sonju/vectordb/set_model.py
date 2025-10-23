@@ -10,12 +10,15 @@ def set_embedding_model():
     )
     return embedding_model
 # 분류 모델
+
+
 def set_classify_model():
     classify_model = ChatOpenAI(
         model = "gpt-4o-mini",    # OpenAI 제공하는 모델명 
         openai_api_key = set_openapi(),
         temperature=0
     )
+
     return classify_model
 
 # 답변 모델

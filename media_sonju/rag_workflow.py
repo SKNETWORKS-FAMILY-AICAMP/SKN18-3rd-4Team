@@ -1,8 +1,7 @@
 from langgraph.graph import StateGraph, END
-from functools import partial
 from vectordb.category_chain import decide_classify_category, should_question,unsupported_node
 from vectordb.search_query import search_question
-from vectordb.evaluate_chunks import evaluate_relevance
+from vectordb.evaluate_chunks import evaluate_relevance,should_evaluate_relevance
 from vectordb.chat_templete import build_context,classify_agent
 from vectordb.multi_agent import customer_chat_llm,tech_chat_llm
 from initial_state import SelfRAGState
@@ -35,17 +34,17 @@ def create_self_rag_workflow(vectorstore):
         "classify",
         should_question,
         {
-            "retrieve": "unsupported_node",
-            "generate": "search"
+            "unsupported_node": "unsupported_node",
+            "search": "search"
         }
     )
     # 조건부 엣지2: 검색 필요성에 따라 분기
     workflow.add_conditional_edges(
         "evaluate_relevance",
-        should_question,
+        should_evaluate_relevance,
         {
-            "retrieve": "unsupported_node",
-            "generate": "build_context"
+            "unsupported_node": "unsupported_node",
+            "build_context": "build_context"
         }
     )
     # 조건부 엣지2: multi_agent에 따른 분기
