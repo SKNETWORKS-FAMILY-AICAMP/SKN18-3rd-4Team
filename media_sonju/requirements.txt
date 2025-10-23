@@ -9,3 +9,9 @@ langchain==0.3.27
 # DB연결용
 python-dotenv==1.1.1
 psycopg2==2.9.11 
+
+# langraph 구축
+langgraph==1.0.1
+
+# langrapth 확인
+graphviz==0.21
