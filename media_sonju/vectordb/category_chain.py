@@ -97,7 +97,7 @@ def decide_classify_category(state: SelfRAGState) -> SelfRAGState:
 def classify_quit(state: SelfRAGState) -> str:    
     if state.get("need_quit"):
         if state.get("max_token") == False:
-            #print("\n[안내] DB에서 적절한 답변을 찾지 못했습니다. 다시 시도해주세요.")
+            print("\n[안내] DB에서 적절한 답변을 찾지 못했습니다. 다시 시도해주세요.")
         else:
             print("지원하지 않는 질문입니다.")
         return END
