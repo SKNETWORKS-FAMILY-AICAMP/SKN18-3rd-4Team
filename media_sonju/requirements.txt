@@ -12,6 +12,3 @@ psycopg2==2.9.11
 
 # langraph 구축
 langgraph==1.0.1
-
-# langrapth 확인
-graphviz==0.21
