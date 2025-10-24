@@ -14,4 +14,3 @@ if __name__ == "__main__":
     self_rag_app = create_self_rag_workflow(vectorstore)
     question = input("궁금한 점을 질문하세요: ")
     result = run_self_rag(self_rag_app,question)
-

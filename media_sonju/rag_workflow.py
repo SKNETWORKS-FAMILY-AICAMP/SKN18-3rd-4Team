@@ -25,25 +25,28 @@ def create_self_rag_workflow(vectorstore):
 
     # 엣지 추가
     workflow.set_entry_point("classify") # 실행이 시작되는 노드 
-    # 검색/분류 경로
-    workflow.add_conditional_edges(
-        "classify",
-        classify_quit,
-        {
-            END: END,
-            "search": "search"})
-    
+
     # 조건부엣지
     workflow.add_conditional_edges(
         "evaluate_relevance",
         classify_retrieval,
         {
+            END: END,
             "question_retrive":"question_retrive",
             "chat_llm":"chat_llm"
                 
         }
     )
-    
+
+    # 조건부엣지
+    workflow.add_conditional_edges(
+        "classify",
+        classify_quit,
+        {
+            END: END,
+            "search":"search"
+        }
+    )
     
     # 공통 경로
     workflow.add_edge("question_retrive","classify")

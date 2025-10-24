@@ -26,8 +26,7 @@ def run_self_rag(self_rag_app, question: str, conversation_history=None, verbose
         "relevance_scores":0.0,
         "context":"",
         "final_answer":"",
-        "max_token": False,
-        "conversation_history": conversation_history  # 추가
+        "max_token": False
     }
     
     # Self-RAG 워크플로우 실행

@@ -2,6 +2,7 @@ from vectordb.set_model import set_score_model
 from initial_state import SelfRAGState
 import json 
 from langchain.prompts import PromptTemplate
+from langgraph.graph import END
 
 def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
     """검색된 문서의 관련성을 평가하는 함수"""
@@ -44,7 +45,6 @@ def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
     llm = set_score_model()
     chain = relevance_prompt | llm
     
-    
     for doc in retrieved_docs:
         try:
             result = chain.invoke({
@@ -64,13 +64,11 @@ def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
         except ValueError:
             print(f"점수 파싱 오류: {json_result["evaluation_score"]}")
             continue
+
     if not relevant_docs:
         retrieval_question = True
-        max_token = state.get("max_token", False)  # 증가하지 않고 현재 상태 유지
-
     else:
         retrieval_question= False
-        max_token = state.get("max_token", False)  # 현재 상태 유지
 
     avg_relevance = sum(relevance_scores) / len(relevance_scores) if relevance_scores else 0.0
     
@@ -78,9 +76,8 @@ def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
     
     return {
         **state,
-        "max_token": max_token,
         "retrieval_question":retrieval_question,
-        "retrieved_docs":relevant_docs,  # 수정: relevant_docs → retrieved_docs (chat_llm과 키 일치)
+        "relevant_docs":relevant_docs, 
         "relevance_scores": avg_relevance,
         "message":message
     }
@@ -88,6 +85,8 @@ def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
 def classify_retrieval(state: SelfRAGState)-> str:
     """검색 필요성에 따라 다음 단계를 결정하는 조건부 함수"""
     if state["retrieval_question"]:
+        if state["max_token"]:
+            return END
         return "question_retrive"
     else:
         return "chat_llm"
