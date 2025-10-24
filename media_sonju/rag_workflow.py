@@ -10,7 +10,7 @@ def create_self_rag_workflow(vectorstore):
     
     # StateGraph 생성
     workflow = StateGraph(SelfRAGState)
-   
+
     # search 노드: 래퍼 함수 사용 (partial 대신 안전)
     def evaluate_relevance_node(state: SelfRAGState):
         return evaluate_relevance(state, vectorstore=vectorstore)
@@ -45,7 +45,16 @@ def create_self_rag_workflow(vectorstore):
                 
         }
     )
-    
+
+    # 조건부엣지
+    workflow.add_conditional_edges(
+        "classify",
+        classify_quit,
+        {
+            END: END,
+            "search":"search"
+        }
+    )
     
     # 공통 경로
     workflow.add_edge("question_retrive","classify")

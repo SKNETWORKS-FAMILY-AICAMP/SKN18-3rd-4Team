@@ -12,15 +12,10 @@ def __get_prompt_for_rewriting_question():
 
     사용자의 질문: {question}
     """
-
     return PromptTemplate.from_template(template=template)
 
-
-
-
-
 def question_retrive(state: SelfRAGState) -> SelfRAGState:
-
+    
     llm = set_llm_model()
     chain = __get_prompt_for_rewriting_question() | llm
     

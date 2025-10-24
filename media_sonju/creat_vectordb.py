@@ -4,7 +4,6 @@ from vectordb.set_model import set_embedding_model
 from vectordb.pgvector import create_pgvector_store, add_documents_to_pgvector
 from dotenv import load_dotenv
 
- 
 def create_faq_vectordb(db, vectorstore):
     chunks = make_chunk(db)
     add_documents_to_pgvector(vectorstore, chunks)
