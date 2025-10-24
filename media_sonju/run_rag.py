@@ -20,7 +20,7 @@ def run_self_rag(self_rag_app, question: str, conversation_history=None, verbose
         "chunk_metadata": {},
         "max_token": False,
         "end_error_message":"",
-        "conversation_history": conversation_history
+        "conversation_history": conversation_history or []
     }
     
     # Self-RAG 워크플로우 실행

@@ -51,18 +51,10 @@ def create_self_rag_workflow(vectorstore):
                 
         }
     )
-    workflow.add_conditional_edges(
-        "chat_llm",
-        classify_retrieval,
-        {
-            END : END,
-            "chat_llm":"classify"
-        }
-    )
-    
+
     # 공통 경로
     workflow.add_edge("question_retrive","classify")
-
+    workflow.add_edge("chat_llm",END)
     # 워크플로우 컴파일
     app = workflow.compile()
     
