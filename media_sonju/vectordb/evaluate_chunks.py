@@ -72,7 +72,6 @@ def evaluate_relevance(state: SelfRAGState,vectorstore)-> SelfRAGState:
                 relevance_scores.append(json_result["evaluation_score"])
                 
             elif json_result["evaluation_score"] < 70:
-            elif json_result["evaluation_score"] < 70:
                 message += json_result["evaluation_detail"] + "\n"
                 continue
                 
