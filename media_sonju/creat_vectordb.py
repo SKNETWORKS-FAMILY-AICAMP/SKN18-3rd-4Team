@@ -1,7 +1,10 @@
-from vectordb.connect_db import connect_DB
-from vectordb.split_chunk import make_chunk
-from vectordb.set_model import set_embedding_model
-from vectordb.pgvector import create_pgvector_store, add_documents_to_pgvector
+from media_sonju.vectordb.connect_db import connect_DB
+from media_sonju.vectordb.split_chunk import make_chunk
+from media_sonju.vectordb.set_model import set_embedding_model
+from media_sonju.vectordb.pgvector import (
+    create_pgvector_store,
+    add_documents_to_pgvector,
+)
 from dotenv import load_dotenv
 
 def create_faq_vectordb(db, vectorstore):
