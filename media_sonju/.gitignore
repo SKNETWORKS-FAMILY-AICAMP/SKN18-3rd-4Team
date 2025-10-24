@@ -1,6 +1,7 @@
 .env
 .venv
-/database
-/data
-/video_data
-/__pycache__
+database
+data
+video_data
+__pycache__
+.vscode

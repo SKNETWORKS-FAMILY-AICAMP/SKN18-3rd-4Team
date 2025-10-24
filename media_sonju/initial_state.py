@@ -11,19 +11,21 @@ class SelfRAGState(TypedDict):
     need_quit: bool  # 검색 필요 여부
     domain: str # 고객지원/기술지원 multi agent 분류
     category: List[str]  # 세부 카테고리
+    max_token:bool
     
     # 답변 생성 관련
-    retrieval_question:bool  # 재질문 필요 여부 (True: DB에서 관련 문서 없음)
-    search_queries: Dict[str, List[Tuple[Any, float]]]  # 벡터DB 검색 결과 (카테고리별 문서 + 유사도 점수)
-    retrieved_docs: List[Dict[str, Any]]  # 관련성 평가 후 선별된 문서 (70점 이상, evaluate_relevance에서 설정)
-    context: str  # LLM Templete에 들어갈 문장 구성 
+    retrieval_question:bool
+    search_queries: Dict[str, List[Tuple[Any, float]]] # RAG 결과
+    retrieved_docs: List[Dict[str, Any]] # 검증이후 query
+    context: str # LLM Templete에 들어갈 문장 구성
+    #chunk_metadata: Dict[str,List[Dict[str]]]
 
     # 평가 관련
     relevance_score: float  # 관련성 점수
     message:str
-    max_token: bool  # 토큰 초과 여부
-
+    
     # 최종 결과
+    
     final_answer: str  # 최종 답변 (출처 포함)
 
 

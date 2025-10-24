@@ -2,11 +2,16 @@ from vectordb.set_model import set_score_model
 from initial_state import SelfRAGState
 import json 
 from langchain.prompts import PromptTemplate
+from vectordb.search_query import search_question
 from langgraph.graph import END
 
-def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
+def evaluate_relevance(state: SelfRAGState,vectorstore)-> SelfRAGState:
+    
+    search_state ={"question":state.get("question"),
+                    "domain":state.get("domain"),
+                    "category":state.get("category")}
+    search_queries = search_question(search_state, vectorstore)
     """검색된 문서의 관련성을 평가하는 함수"""
-    search_queries = state.get("search_queries")
     retrieved_docs = [{
         "search_category": category,
         "content": doc.page_content,
@@ -16,7 +21,7 @@ def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
         for (doc, _) in docs
     ] 
 
-
+    final_message = state.get("final_anwser")
     relevant_docs = []
     relevance_scores = []
     avg_relevance = 0.0
@@ -52,21 +57,25 @@ def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
                 "document": doc["content"]
             })
             json_result = json.loads(result.content)
-
-            if json_result["evaluation_score"] >= 70:  # 70점 이상만 관련 문서로 간주
+            
+            if json_result["evaluation_score"] >=70:  # 3점 이상만 관련 문서로 간주
                 relevant_docs.append(doc)
                 relevance_scores.append(json_result["evaluation_score"])
                 
+            elif json_result["evaluation_score"] < 70:
             elif json_result["evaluation_score"] < 70:
                 message += json_result["evaluation_detail"] + "\n"
                 continue
                 
         except ValueError:
-            print(f"점수 파싱 오류: {json_result["evaluation_score"]}")
+            print("점수 파싱 오류")
             continue
 
     if not relevant_docs:
         retrieval_question = True
+        if state.get("max_token"):
+            final_message ="죄송합니다. 조금 더 상세히 설명해주시면 도와드리도록 하겠습니다." 
+
     else:
         retrieval_question= False
 
@@ -77,16 +86,17 @@ def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
     return {
         **state,
         "retrieval_question":retrieval_question,
-        "relevant_docs":relevant_docs, 
+        "retrieved_docs":relevant_docs,
         "relevance_scores": avg_relevance,
-        "message":message
+        "message":message,
+        "final_answer":final_message
     }
     
 def classify_retrieval(state: SelfRAGState)-> str:
-    """검색 필요성에 따라 다음 단계를 결정하는 조건부 함수"""
     if state["retrieval_question"]:
-        if state["max_token"]:
+        if state.get("max_token"):
             return END
-        return "question_retrive"
+        else:
+            return "question_retrive"
     else:
         return "chat_llm"
