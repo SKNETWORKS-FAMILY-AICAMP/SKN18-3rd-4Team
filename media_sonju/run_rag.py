@@ -1,4 +1,3 @@
-# 편리한 실행 함수
 def run_self_rag(self_rag_app, question: str, conversation_history=None, verbose: bool = True):
     """Self-RAG 시스템을 실행하는 메인 함수"""
     
@@ -14,7 +13,7 @@ def run_self_rag(self_rag_app, question: str, conversation_history=None, verbose
         "question": question,
         "need_quit": False,
         "retrieval_question":False,
-        "domain": "",
+        "domain": None,
         "category":[],
         "message":"",
         "search_queries": {},

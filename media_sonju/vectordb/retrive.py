@@ -1,6 +1,6 @@
-from initial_state import SelfRAGState
+from media_sonju.initial_state import SelfRAGState
 from langchain.prompts import PromptTemplate
-from vectordb.set_model import set_llm_model
+from media_sonju.vectordb.set_model import set_llm_model
 
 def __get_prompt_for_rewriting_question():
     template = """

@@ -1,17 +1,14 @@
-from vectordb.set_model import set_classify_model
+from media_sonju.vectordb.set_model import set_classify_model
 from langchain.prompts import PromptTemplate
-from initial_state import SelfRAGState
+from media_sonju.initial_state import SelfRAGState
 from langchain_core.output_parsers import JsonOutputParser
 from pydantic import BaseModel
 from langgraph.graph import END
 
-
-#from set_model import set_classify_model
 class CategoryResponse(BaseModel):
     need_quit: bool
     domain: str | None = None
     category: list[str] | None = None
-
 
 def decide_classify_category(state: SelfRAGState) -> SelfRAGState:
     message = state.get("final_answer")
@@ -30,68 +27,66 @@ def decide_classify_category(state: SelfRAGState) -> SelfRAGState:
                     "슈퍼아이스", "가스오븐", "레인지후드", "식기세척기", "음식물처리기", "전자레인지", "전기오븐"]
 
     template = """
-        # **카테고리 분류 지시사항**
+    # **카테고리 분류 지시사항**
 
-        아래 고객 질문에 대해 다음 단계를 순서대로 판단하세요.
+    아래 고객 질문에 대해 **정확한 JSON 형식**으로만 출력하세요.
+    모든 필드는 반드시 포함되어야 하며 생략하지 마세요.
 
-        ## 1. **지원 서비스 여부 판단**
-        - 우리의 서비스는 아래 두 가지 도메인만 지원합니다.
-            - 고객지원: 계약/요금/카드/회원/구독/구매/관리 서비스 등
-            - 기술지원: 제품 고장/설치/사용법/점검/수리 등
-        - 이 외의 서비스라면 `"need_quit": true` 로 설정합니다.
+    ---
+    ## 도메인(domain)
+    - 반드시 "고객지원" 또는 "기술지원" 중 하나로 지정합니다.
+    - 둘 다 해당되지 않으면 `"domain": null` 로 작성합니다.
+    - 절대로 빈 문자열("")이나 생략은 허용되지 않습니다.
 
-        ## 2. **도메인 분류**
-        - 고객지원 또는 기술지원 중 하나를 정확히 선택합니다.
+    ## 세부 카테고리(category)
+    - 도메인별 후보 리스트 중 하나 이상을 선택합니다.
+    - 없으면 null로 작성합니다.
 
-        ## 3. **세부 카테고리 분류**
-        - 도메인별 후보 리스트를 참고하여 category를 작성합니다.
-        - 여러 개에 속하면 배열로 여러 항목을 포함시킵니다.
-        - 분류할 수 없다면 `"category": null` 로 답변합니다.
+    ### 고객지원 후보
+    {customer_support}
 
-        ### 고객지원 세부 후보
-        {customer_support}
+    ### 기술지원 후보
+    {tech_support}
 
-        ### 기술지원 세부 후보
-        {tech_support}
+    ---
+    ## 출력 예시
+    {{
+        "need_quit": false,
+        "domain": "기술지원",
+        "category": ["공기청정기"]
+    }}
 
-        ## 4. **출력 형식 (JSON ONLY)**
-        반드시 아래 형식으로만 출력하세요:
-        {{
-            "need_quit": false,
-            "domain": "고객지원",
-            "category": ["구독/멤버십제도"]
-        }}
-        ---
-        # **이전 대화**
-        {conversation_history}
-
-        ---
-        # **질문**
-        {question}
+    ---
+    # 질문:
+    {question}
     """
+
     parser = JsonOutputParser(pydantic_object=CategoryResponse)
     prompt = PromptTemplate.from_template(template)
     chain = prompt | set_classify_model() | parser
+    res = chain.invoke({
+        "question": state.get("question"),
+        "customer_support": ", ".join(CUSTOMER_SUPPORT),
+        "tech_support": ", ".join(TECH_SUPPORT)
+    })
 
-    res = chain.invoke({"question": state["question"],
-                        "conversation_history": history_text if history_text else "[이전 대화 없음]",
-                        "customer_support": ", ".join(CUSTOMER_SUPPORT),
-                        "tech_support": ", ".join(TECH_SUPPORT)})
-    if res["need_quit"] == True:
-        message = "지원하지 않는 질문입니다. 다시 질문해주세요"
-    
+    # ✅ 안전 보정
+    domain = res.get("domain")
+    if not domain or str(domain).strip().lower() in ["", "none", "null"]:
+        domain = None
+
+    if res["need_quit"]:
+        message = "지원하지 않는 질문입니다. 다시 질문해주세요."
+
     return {
         **state,
-        "need_quit":res["need_quit"],
-        "domain" : res.get("domain", None),
-        "category" : res.get("category", None),
-        "final_answer":message
-        
+        "need_quit": res.get("need_quit", False),
+        "domain": domain,
+        "category": res.get("category", []),
+        "final_answer": message,
     }
-    
-def classify_quit(state: SelfRAGState) -> str:
-    if state["need_quit"]:
-        return END
-    else:
-        return "evaluate_relevance"
 
+def classify_quit(state: SelfRAGState) -> str:
+    if state.get("need_quit", False):
+        return END
+    return "evaluate_relevance"
