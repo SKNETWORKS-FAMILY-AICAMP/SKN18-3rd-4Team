@@ -3,11 +3,15 @@ from vectordb.set_model import set_embedding_model
 from dotenv import load_dotenv
 
 # 편리한 실행 함수
-def run_self_rag(self_rag_app, question: str, verbose: bool = True):
+def run_self_rag(self_rag_app, question: str, conversation_history=None, verbose: bool = True):
     """Self-RAG 시스템을 실행하는 메인 함수"""
     
     print(f"질문: {question}")
     print("=" * 50)
+
+    # 대화 이력이 없으면 빈 리스트
+    if conversation_history is None:
+        conversation_history = []
     
     # 초기 상태 설정
     initial_state = {
@@ -21,7 +25,8 @@ def run_self_rag(self_rag_app, question: str, verbose: bool = True):
         "retrieved_docs":[],
         "relevance_scores":0.0,
         "context":"",
-        "final_answer":""
+        "final_answer":"",
+        "max_token": False
     }
     
     # Self-RAG 워크플로우 실행
