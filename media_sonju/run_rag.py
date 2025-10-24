@@ -37,7 +37,6 @@ def run_self_rag(self_rag_app, question: str, conversation_history=None, verbose
         
         print(result["final_answer"])
 
-        print(result["conversation_history"])
         conversation_history.append(f"사용자: {question}")
         conversation_history.append(f"AI: {result['final_answer']}")
         print(result["conversation_history"])
