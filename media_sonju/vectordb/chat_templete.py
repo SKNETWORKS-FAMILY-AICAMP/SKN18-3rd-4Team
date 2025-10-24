@@ -37,6 +37,14 @@ def chat_llm(state: SelfRAGState) -> SelfRAGState:
     print(f"🧠 {state.get('domain')} AI 챗봇 실행 중...")
     question = state.get("question")
 
+    # ✅ 추가: 대화 이력 가져오기
+    conversation_history = state.get("conversation_history", [])
+    history_text = ""
+    if conversation_history:
+        # 최근 5개만 사용
+        for msg in conversation_history[-5:]:
+            history_text += f"{msg}\n"
+
     context_parts = []
     for doc in state.get("retrieved_docs", []):
         metadata = doc.get("metadata", {})
@@ -67,6 +75,9 @@ def chat_llm(state: SelfRAGState) -> SelfRAGState:
 
     당신은 **기술지원, 고객지원 상담 AI**입니다.
     아래 문서들을 참고하여 사용자의 질문에 대한 **정확하고 구체적인 답변**을 작성하세요.
+
+    ## 이전 대화 맥락
+    {history_text if history_text else "없음"}
 
     ## 지시사항
     - 문서 내용을 바탕으로 논리적이고 구체적으로 설명합니다.

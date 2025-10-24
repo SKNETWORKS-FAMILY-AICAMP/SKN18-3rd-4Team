@@ -3,7 +3,7 @@ def search_question(search_state,vectorstore) -> dict:
     domain = search_state.get("domain")
     categories = search_state.get("category")
     query = search_state.get("question")  
-    all_results = {}  
+    all_results = {} 
     if categories:
         for cat in categories:
                 print(f"{cat} 유사도 검색 시작")

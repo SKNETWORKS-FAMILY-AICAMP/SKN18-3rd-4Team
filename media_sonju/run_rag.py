@@ -1,7 +1,3 @@
-from rag_workflow import create_self_rag_workflow
-from vectordb.set_model import set_embedding_model
-from dotenv import load_dotenv
-
 # 편리한 실행 함수
 def run_self_rag(self_rag_app, question: str, conversation_history=None, verbose: bool = True):
     """Self-RAG 시스템을 실행하는 메인 함수"""
@@ -28,7 +24,8 @@ def run_self_rag(self_rag_app, question: str, conversation_history=None, verbose
         "final_answer":"",
         "chunk_metadata": {},
         "max_token":False,
-        "end_error_message":""
+        "end_error_message":"",
+        "conversation_history": conversation_history
     }
     
     # Self-RAG 워크플로우 실행
@@ -39,6 +36,11 @@ def run_self_rag(self_rag_app, question: str, conversation_history=None, verbose
             print("\n=== Self-RAG 실행 결과 ===")
         
         print(result["final_answer"])
+
+        print(result["conversation_history"])
+        conversation_history.append(f"사용자: {question}")
+        conversation_history.append(f"AI: {result['final_answer']}")
+        print(result["conversation_history"])
         
         return result
         

@@ -14,7 +14,15 @@ class CategoryResponse(BaseModel):
 
 
 def decide_classify_category(state: SelfRAGState) -> SelfRAGState:
-    message = state.get("final_anwser")
+    message = state.get("final_answer")
+
+    conversation_history = state.get("conversation_history", [])
+    history_text = ""
+    if conversation_history:
+        # 최근 3개만 사용 (토큰 절약)
+        for msg in conversation_history[-3:]:
+            history_text += f"{msg}\n"
+    
     CUSTOMER_SUPPORT  = ["계약관련", "관리서비스", "구독/멤버십제도", "요금납부","제휴카드"]
     TECH_SUPPORT = ["공기청정기", "비데", "안마의자", "히터", "믹서기", "냉장고", "커피머신", "전기온수기", 
                     "세탁기", "상업용 스팀오븐레인지","상업용 튀김기", "선풍기", "이동식에어컨", "써큘레이터", 
@@ -53,6 +61,9 @@ def decide_classify_category(state: SelfRAGState) -> SelfRAGState:
             "domain": "고객지원",
             "category": ["구독/멤버십제도"]
         }}
+        ---
+        # **이전 대화**
+        {conversation_history}
 
         ---
         # **질문**
@@ -61,7 +72,9 @@ def decide_classify_category(state: SelfRAGState) -> SelfRAGState:
     parser = JsonOutputParser(pydantic_object=CategoryResponse)
     prompt = PromptTemplate.from_template(template)
     chain = prompt | set_classify_model() | parser
+
     res = chain.invoke({"question": state["question"],
+                        "conversation_history": history_text if history_text else "[이전 대화 없음]",
                         "customer_support": ", ".join(CUSTOMER_SUPPORT),
                         "tech_support": ", ".join(TECH_SUPPORT)})
     if res["need_quit"] == True:
@@ -70,8 +83,8 @@ def decide_classify_category(state: SelfRAGState) -> SelfRAGState:
     return {
         **state,
         "need_quit":res["need_quit"],
-        "domain" : res["domain"],
-        "category" : res["category"],
+        "domain" : res.get("domain", None),
+        "category" : res.get("category", None),
         "final_answer":message
         
     }
