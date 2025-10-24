@@ -2,11 +2,16 @@ from vectordb.set_model import set_score_model
 from initial_state import SelfRAGState
 import json 
 from langchain.prompts import PromptTemplate
+from vectordb.search_query import search_question
 from langgraph.graph import END
 
-def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
+def evaluate_relevance(state: SelfRAGState,vectorstore)-> SelfRAGState:
+    
+    search_state ={"question":state.get("question"),
+                    "domain":state.get("domain"),
+                    "category":state.get("category")}
+    search_queries = search_question(search_state, vectorstore)
     """검색된 문서의 관련성을 평가하는 함수"""
-    search_queries = state.get("search_queries")
     retrieved_docs = [{
         "search_category": category,
         "content": doc.page_content,
@@ -16,7 +21,7 @@ def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
         for (doc, _) in docs
     ] 
 
-
+    final_message = state.get("final_anwser")
     relevant_docs = []
     relevance_scores = []
     avg_relevance = 0.0
@@ -25,20 +30,29 @@ def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
     # 관련성 평가 프롬프트
     relevance_prompt = PromptTemplate.from_template(
         """
-        당신은 최고의 평가자입니다.
-        사용자의 질문에 대한 답변이 벡터DB의 데이터와 얼마나 일치하는지 평가해주세요.
-        평가 기준:
-        - 100점: 질문과 문서의 주제/키워드가 정확히 일치
-        - 80~90점: 매우 관련성 높음, 직접적인 답변 가능
-        - 60~70점: 어느 정도 관련 있지만 불완전
-        - 50점 이하: 관련성 낮음, 다른 주제
+        #  **검색 문서 관련성 평가**
+
+        당신은 **벡터DB 기반 검색 결과 평가 전문가**입니다.
+        사용자의 질문과 문서 내용이 얼마나 관련이 높은지 **0~100점**으로 평가하세요.
+
+        ## 평가 기준
+        - **100점:** 질문의 핵심 답변을 직접 포함
+        - **70~99점:** 매우 유사하거나 직접적인 관련
+        - **50~69점:** 부분적으로 관련 있음
+        - **0~49점:** 관련성 낮음 (무시)
+
+        ## 출력 형식 (JSON)
         {{
-        "evaluation_score": 0~100 사이의 숫자,
-        "evaluation_detail": "답변이 벡터DB의 데이터와 얼마나 일치하는지 설명"
+            "evaluation_score": (0~100),
+            "evaluation_detail": "간단한 이유 설명"
         }}
 
-        사용자의 질문: {question}
-        벡터DB의 데이터: {document}
+        ---
+        # 질문:
+        {question}
+
+        # 문서 내용:
+        {document}
         """
     )
     
@@ -52,8 +66,8 @@ def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
                 "document": doc["content"]
             })
             json_result = json.loads(result.content)
-
-            if json_result["evaluation_score"] >= 70:  # 70점 이상만 관련 문서로 간주
+            
+            if json_result["evaluation_score"] >=70:  # 3점 이상만 관련 문서로 간주
                 relevant_docs.append(doc)
                 relevance_scores.append(json_result["evaluation_score"])
                 
@@ -62,11 +76,18 @@ def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
                 continue
                 
         except ValueError:
+<<<<<<< HEAD
             print(f"점수 파싱 오류")
+=======
+            print("점수 파싱 오류")
+>>>>>>> origin/dev
             continue
 
     if not relevant_docs:
         retrieval_question = True
+        if state.get("max_token"):
+            final_message ="죄송합니다. 조금 더 상세히 설명해주시면 도와드리도록 하겠습니다." 
+
     else:
         retrieval_question = False
 
@@ -76,17 +97,23 @@ def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
     
     return {
         **state,
+<<<<<<< HEAD
         "retrieval_question":retrieval_question,
         "retrieved_docs":relevant_docs, 
+=======
+        "retrieval_question": retrieval_question,
+        "retrieved_docs": relevant_docs,   # ✅ 여기 변경
+>>>>>>> origin/dev
         "relevance_scores": avg_relevance,
         "message":message
     }
+
     
 def classify_retrieval(state: SelfRAGState)-> str:
-    """검색 필요성에 따라 다음 단계를 결정하는 조건부 함수"""
     if state["retrieval_question"]:
-        if state["max_token"]:
+        if state.get("max_token"):
             return END
-        return "question_retrive"
+        else:
+            return "question_retrive"
     else:
         return "chat_llm"
