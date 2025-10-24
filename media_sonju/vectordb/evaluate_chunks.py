@@ -30,20 +30,29 @@ def evaluate_relevance(state: SelfRAGState,vectorstore)-> SelfRAGState:
     # 관련성 평가 프롬프트
     relevance_prompt = PromptTemplate.from_template(
         """
-        당신은 최고의 평가자입니다.
-        사용자의 질문에 대한 답변이 벡터DB의 데이터와 얼마나 일치하는지 평가해주세요.
-        평가 기준:
-        - 100점: 질문과 문서의 주제/키워드가 정확히 일치
-        - 80~90점: 매우 관련성 높음, 직접적인 답변 가능
-        - 60~70점: 어느 정도 관련 있지만 불완전
-        - 50점 이하: 관련성 낮음, 다른 주제
+        #  **검색 문서 관련성 평가**
+
+        당신은 **벡터DB 기반 검색 결과 평가 전문가**입니다.
+        사용자의 질문과 문서 내용이 얼마나 관련이 높은지 **0~100점**으로 평가하세요.
+
+        ## 평가 기준
+        - **100점:** 질문의 핵심 답변을 직접 포함
+        - **70~99점:** 매우 유사하거나 직접적인 관련
+        - **50~69점:** 부분적으로 관련 있음
+        - **0~49점:** 관련성 낮음 (무시)
+
+        ## 출력 형식 (JSON)
         {{
-        "evaluation_score": 0~100 사이의 숫자,
-        "evaluation_detail": "답변이 벡터DB의 데이터와 얼마나 일치하는지 설명"
+            "evaluation_score": (0~100),
+            "evaluation_detail": "간단한 이유 설명"
         }}
 
-        사용자의 질문: {question}
-        벡터DB의 데이터: {document}
+        ---
+        # 질문:
+        {question}
+
+        # 문서 내용:
+        {document}
         """
     )
     
@@ -85,12 +94,12 @@ def evaluate_relevance(state: SelfRAGState,vectorstore)-> SelfRAGState:
     
     return {
         **state,
-        "retrieval_question":retrieval_question,
-        "retrieved_docs":relevant_docs,
+        "retrieval_question": retrieval_question,
+        "retrieved_docs": relevant_docs,   # ✅ 여기 변경
         "relevance_scores": avg_relevance,
-        "message":message,
-        "final_answer":final_message
+        "message":message
     }
+
     
 def classify_retrieval(state: SelfRAGState)-> str:
     if state["retrieval_question"]:
