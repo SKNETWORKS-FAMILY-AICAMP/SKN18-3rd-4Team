@@ -1,8 +1,3 @@
-from rag_workflow import create_self_rag_workflow
-from vectordb.set_model import set_embedding_model
-from dotenv import load_dotenv
-
-# 편리한 실행 함수
 def run_self_rag(self_rag_app, question: str, conversation_history=None, verbose: bool = True):
     """Self-RAG 시스템을 실행하는 메인 함수"""
     

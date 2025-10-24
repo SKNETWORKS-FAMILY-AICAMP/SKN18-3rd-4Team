@@ -1,4 +1,4 @@
-from initial_state import SelfRAGState
+from media_sonju.initial_state import SelfRAGState
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.messages import SystemMessage
 from langchain_core.prompts import HumanMessagePromptTemplate
@@ -28,7 +28,7 @@ def find_image_for_title(image_field: str, title: str) -> list[str]:
 
 def chat_llm(state: SelfRAGState) -> SelfRAGState:
     """검색된 문서 기반으로 기술/고객지원 답변 생성"""
-    print(f"🧠 {state.get('domain')} AI 챗봇 실행 중...")
+    print(f'{state.get("domain")} AI 챗봇 실행')
     question = state.get("question")
 
     context_parts = []
@@ -75,7 +75,7 @@ def chat_llm(state: SelfRAGState) -> SelfRAGState:
     - 사용자의 질문에 직접적인 답변을 제공합니다.
     - 문서의 출처(title)를 괄호 안에 명시합니다.
     - 표가 제공된 경우, 마크다운 형식을 그대로 유지하세요.
-    - 이미지가 제공된 경우, '[n 제목](URL)' 형태로 포함합니다.
+    - 이미지가 제공된 경우, `![제목](URL)` 형태로 작성해 바로 표시되도록 합니다.
 
     ---
     # **참고 문서들**

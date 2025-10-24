@@ -1,8 +1,8 @@
-from vectordb.set_model import set_score_model
-from initial_state import SelfRAGState
+from media_sonju.vectordb.set_model import set_score_model
+from media_sonju.initial_state import SelfRAGState
 import json 
 from langchain.prompts import PromptTemplate
-from vectordb.search_query import search_question
+from media_sonju.vectordb.search_query import search_question
 from langgraph.graph import END
 
 def evaluate_relevance(state: SelfRAGState,vectorstore)-> SelfRAGState:

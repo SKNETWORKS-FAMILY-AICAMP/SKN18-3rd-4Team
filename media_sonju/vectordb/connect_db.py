@@ -1,6 +1,6 @@
 import os
 from urllib.parse import urlparse
-from vectordb.Singleton import SingletonDatabase
+from media_sonju.vectordb.Singleton import SingletonDatabase
 
 def connect_DB(connect_str="CONNECTION_STRING"):
     conn_url = os.getenv(connect_str)

@@ -1,9 +1,15 @@
 from langgraph.graph import StateGraph, END
-from vectordb.category_chain import decide_classify_category,classify_quit
-from vectordb.evaluate_chunks import evaluate_relevance,classify_retrieval
-from vectordb.chat_templete import chat_llm
-from vectordb.retrive import question_retrive
-from initial_state import SelfRAGState
+from media_sonju.vectordb.category_chain import (
+    decide_classify_category,
+    classify_quit,
+)
+from media_sonju.vectordb.evaluate_chunks import (
+    evaluate_relevance,
+    classify_retrieval,
+)
+from media_sonju.vectordb.chat_templete import chat_llm
+from media_sonju.vectordb.retrive import question_retrive
+from media_sonju.initial_state import SelfRAGState
 
 def create_self_rag_workflow(vectorstore):
     """Self-RAG 워크플로우를 생성하는 함수"""
