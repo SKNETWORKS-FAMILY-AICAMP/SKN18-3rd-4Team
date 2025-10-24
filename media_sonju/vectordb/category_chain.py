@@ -12,13 +12,6 @@ class CategoryResponse(BaseModel):
 
 def decide_classify_category(state: SelfRAGState) -> SelfRAGState:
     message = state.get("final_answer")
-
-    conversation_history = state.get("conversation_history", [])
-    history_text = ""
-    if conversation_history:
-        # 최근 3개만 사용 (토큰 절약)
-        for msg in conversation_history[-3:]:
-            history_text += f"{msg}\n"
     
     CUSTOMER_SUPPORT  = ["계약관련", "관리서비스", "구독/멤버십제도", "요금납부","제휴카드"]
     TECH_SUPPORT = ["공기청정기", "비데", "안마의자", "히터", "믹서기", "냉장고", "커피머신", "전기온수기", 
@@ -48,6 +41,7 @@ def decide_classify_category(state: SelfRAGState) -> SelfRAGState:
     ### 기술지원 후보
     {tech_support}
 
+    
     ---
     ## 출력 예시
     {{
@@ -59,6 +53,7 @@ def decide_classify_category(state: SelfRAGState) -> SelfRAGState:
     ---
     # 질문:
     {question}
+
     """
 
     parser = JsonOutputParser(pydantic_object=CategoryResponse)

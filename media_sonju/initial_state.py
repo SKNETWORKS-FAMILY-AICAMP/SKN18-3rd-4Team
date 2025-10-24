@@ -28,7 +28,7 @@ class SelfRAGState(TypedDict):
     final_answer: str  # 최종 답변 (출처 포함)
 
     # 대화 이력
-    conversation_history: List[Any]  # 이전 대화 메시지 리스트
+    conversation_history: Dict[str, str]  # 이전 대화 메시지 리스트
 
 
 print("SelfRAGState 클래스 정의 완료!")

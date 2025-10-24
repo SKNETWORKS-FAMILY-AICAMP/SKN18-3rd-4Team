@@ -13,7 +13,6 @@ def singleton(class_):
 
 	return get_instance
 
-
 @singleton
 class SingletonDatabase:
     _connection_pool = None
