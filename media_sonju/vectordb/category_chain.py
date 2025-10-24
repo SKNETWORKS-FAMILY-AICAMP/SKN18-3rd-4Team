@@ -4,6 +4,8 @@ from initial_state import SelfRAGState
 from langchain_core.output_parsers import JsonOutputParser
 from pydantic import BaseModel
 from langgraph.graph import END
+
+
 #from set_model import set_classify_model
 class CategoryResponse(BaseModel):
     need_quit: bool
@@ -12,6 +14,7 @@ class CategoryResponse(BaseModel):
 
 
 def decide_classify_category(state: SelfRAGState) -> SelfRAGState:
+    message = state.get("final_anwser")
     CUSTOMER_SUPPORT  = ["계약관련", "관리서비스", "구독/멤버십제도", "요금납부","제휴카드"]
     TECH_SUPPORT = ["공기청정기", "비데", "안마의자", "히터", "믹서기", "냉장고", "커피머신", "전기온수기", 
                     "세탁기", "상업용 스팀오븐레인지","상업용 튀김기", "선풍기", "이동식에어컨", "써큘레이터", 
@@ -61,12 +64,21 @@ def decide_classify_category(state: SelfRAGState) -> SelfRAGState:
     res = chain.invoke({"question": state["question"],
                         "customer_support": ", ".join(CUSTOMER_SUPPORT),
                         "tech_support": ", ".join(TECH_SUPPORT)})
-
-    return res
+    if res["need_quit"] == True:
+        message = "지원하지 않는 질문입니다. 다시 질문해주세요"
     
-def classify_quit(state: SelfRAGState) -> str:    
-    if state.get("need_quit"):
-        print("죄송합니다. 지원하지 않는 질문입니다. 다시 입력해주세요")
+    return {
+        **state,
+        "need_quit":res["need_quit"],
+        "domain" : res["domain"],
+        "category" : res["category"],
+        "final_answer":message
+        
+    }
+    
+def classify_quit(state: SelfRAGState) -> str:
+    if state["need_quit"]:
         return END
     else:
-        return "search"
+        return "evaluate_relevance"
+

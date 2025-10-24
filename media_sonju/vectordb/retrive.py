@@ -39,6 +39,6 @@ def question_retrive(state: SelfRAGState) -> SelfRAGState:
     })
     return {
         **state,
-        "max_token": True,
-        "question": result.content
+        "question": result.content,
+        "max_token":True
     }
