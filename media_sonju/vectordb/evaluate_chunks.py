@@ -62,13 +62,13 @@ def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
                 continue
                 
         except ValueError:
-            print(f"점수 파싱 오류: {json_result["evaluation_score"]}")
+            print(f"점수 파싱 오류")
             continue
 
     if not relevant_docs:
         retrieval_question = True
     else:
-        retrieval_question= False
+        retrieval_question = False
 
     avg_relevance = sum(relevance_scores) / len(relevance_scores) if relevance_scores else 0.0
     
@@ -77,7 +77,7 @@ def evaluate_relevance(state: SelfRAGState)-> SelfRAGState:
     return {
         **state,
         "retrieval_question":retrieval_question,
-        "relevant_docs":relevant_docs, 
+        "retrieved_docs":relevant_docs, 
         "relevance_scores": avg_relevance,
         "message":message
     }
