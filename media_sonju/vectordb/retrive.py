@@ -29,5 +29,7 @@ def question_retrive(state: SelfRAGState) -> SelfRAGState:
         "message":state["message"],
     })
     return {
-        "question": result.content
+        **state,
+        "question": result.content,
+        "max_token":True
     }

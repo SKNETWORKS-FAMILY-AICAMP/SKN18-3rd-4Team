@@ -21,7 +21,10 @@ def run_self_rag(self_rag_app, question: str, verbose: bool = True):
         "retrieved_docs":[],
         "relevance_scores":0.0,
         "context":"",
-        "final_answer":""
+        "final_answer":"",
+        "chunk_metadata": {},
+        "max_token":False,
+        "end_error_message":""
     }
     
     # Self-RAG 워크플로우 실행

@@ -4,3 +4,4 @@ database
 data
 video_data
 __pycache__
+.vscode
