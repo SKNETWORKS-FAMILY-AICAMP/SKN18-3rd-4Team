@@ -45,16 +45,6 @@ def create_self_rag_workflow(vectorstore):
                 
         }
     )
-
-    # 조건부엣지
-    workflow.add_conditional_edges(
-        "classify",
-        classify_quit,
-        {
-            END: END,
-            "search":"search"
-        }
-    )
     
     # 공통 경로
     workflow.add_edge("question_retrive","classify")

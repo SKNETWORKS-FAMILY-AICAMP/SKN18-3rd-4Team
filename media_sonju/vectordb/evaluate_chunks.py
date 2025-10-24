@@ -76,11 +76,7 @@ def evaluate_relevance(state: SelfRAGState,vectorstore)-> SelfRAGState:
                 continue
                 
         except ValueError:
-<<<<<<< HEAD
-            print(f"점수 파싱 오류")
-=======
             print("점수 파싱 오류")
->>>>>>> origin/dev
             continue
 
     if not relevant_docs:
@@ -97,13 +93,8 @@ def evaluate_relevance(state: SelfRAGState,vectorstore)-> SelfRAGState:
     
     return {
         **state,
-<<<<<<< HEAD
-        "retrieval_question":retrieval_question,
-        "retrieved_docs":relevant_docs, 
-=======
         "retrieval_question": retrieval_question,
         "retrieved_docs": relevant_docs,   # ✅ 여기 변경
->>>>>>> origin/dev
         "relevance_scores": avg_relevance,
         "message":message
     }
