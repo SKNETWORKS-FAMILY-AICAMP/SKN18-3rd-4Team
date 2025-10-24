@@ -85,7 +85,7 @@ def evaluate_relevance(state: SelfRAGState,vectorstore)-> SelfRAGState:
             final_message ="죄송합니다. 조금 더 상세히 설명해주시면 도와드리도록 하겠습니다." 
 
     else:
-        retrieval_question= False
+        retrieval_question = False
 
     avg_relevance = sum(relevance_scores) / len(relevance_scores) if relevance_scores else 0.0
     
@@ -97,7 +97,7 @@ def evaluate_relevance(state: SelfRAGState,vectorstore)-> SelfRAGState:
         "retrieved_docs": relevant_docs,   # ✅ 여기 변경
         "relevance_scores": avg_relevance,
         "message":message,
-        "final_answer":final_message
+        "final_answer": final_message
     }
 
     

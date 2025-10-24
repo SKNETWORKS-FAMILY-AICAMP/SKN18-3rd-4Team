@@ -3,10 +3,6 @@ def run_self_rag(self_rag_app, question: str, conversation_history=None, verbose
     
     print(f"질문: {question}")
     print("=" * 50)
-
-    # 대화 이력이 없으면 빈 리스트
-    if conversation_history is None:
-        conversation_history = []
     
     # 초기 상태 설정
     initial_state = {
@@ -22,8 +18,9 @@ def run_self_rag(self_rag_app, question: str, conversation_history=None, verbose
         "context":"",
         "final_answer":"",
         "chunk_metadata": {},
-        "max_token":False,
-        "end_error_message":""
+        "max_token": False,
+        "end_error_message":"",
+        "conversation_history": conversation_history or []
     }
     
     # Self-RAG 워크플로우 실행
@@ -34,6 +31,8 @@ def run_self_rag(self_rag_app, question: str, conversation_history=None, verbose
             print("\n=== Self-RAG 실행 결과 ===")
         
         print(result["final_answer"])
+
+        print(result["conversation_history"])
         
         return result
         

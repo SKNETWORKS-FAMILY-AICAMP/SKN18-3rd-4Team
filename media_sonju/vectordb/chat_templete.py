@@ -25,7 +25,6 @@ def find_image_for_title(image_field: str, title: str) -> list[str]:
             urls.extend(found)
     return urls
 
-
 def chat_llm(state: SelfRAGState) -> SelfRAGState:
     """검색된 문서 기반으로 기술/고객지원 답변 생성"""
     print(f'{state.get("domain")} AI 챗봇 실행')
@@ -62,13 +61,22 @@ def chat_llm(state: SelfRAGState) -> SelfRAGState:
         context_parts.append(f"### 📘 {category} 관련 문서: {title}\n{content_with_extras}")
 
     context = "\n\n---\n\n".join(context_parts)
-
+    history = state.get("conversation_history") or []
+    history_lines = [
+        f"{msg.get('role', 'user')}: {msg.get('content', '').strip()}"
+        for msg in history
+    ]
+    history_text = "\n".join(history_lines) if history_lines else "이전 대화 없음"
+    
     # ✅ 프롬프트 정의
     prompt_template = f"""
     # **AI 기술지원, 고객지원 답변 생성 요청**
 
     당신은 **기술지원, 고객지원 상담 AI**입니다.
     아래 문서들을 참고하여 사용자의 질문에 대한 **정확하고 구체적인 답변**을 작성하세요.
+
+    ## 이전 대화 맥락
+    - {history_text}
 
     ## 지시사항
     - 문서 내용을 바탕으로 논리적이고 구체적으로 설명합니다.
@@ -98,6 +106,6 @@ def chat_llm(state: SelfRAGState) -> SelfRAGState:
 
     model = set_llm_model()
     chain = chat_prompt | model
-    response = chain.invoke({"context": context, "question": question})
+    response = chain.invoke({"context": context, "question": question, "history_text": history_text})
 
     return {**state, "final_answer": response.content}
