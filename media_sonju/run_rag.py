@@ -18,7 +18,7 @@ def run_self_rag(self_rag_app, question: str, conversation_history=None, verbose
         "question": question,
         "need_quit": False,
         "retrieval_question":False,
-        "domain": "",
+        "domain": None,
         "category":[],
         "message":"",
         "search_queries": {},

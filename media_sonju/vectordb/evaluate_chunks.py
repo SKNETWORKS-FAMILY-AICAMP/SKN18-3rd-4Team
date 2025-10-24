@@ -67,11 +67,11 @@ def evaluate_relevance(state: SelfRAGState,vectorstore)-> SelfRAGState:
             })
             json_result = json.loads(result.content)
             
-            if json_result["evaluation_score"] >=70:  # 3점 이상만 관련 문서로 간주
+            if json_result["evaluation_score"] >=50:  # 3점 이상만 관련 문서로 간주
                 relevant_docs.append(doc)
                 relevance_scores.append(json_result["evaluation_score"])
                 
-            elif json_result["evaluation_score"] < 70:
+            elif json_result["evaluation_score"] < 50:
                 message += json_result["evaluation_detail"] + "\n"
                 continue
                 
@@ -96,7 +96,8 @@ def evaluate_relevance(state: SelfRAGState,vectorstore)-> SelfRAGState:
         "retrieval_question": retrieval_question,
         "retrieved_docs": relevant_docs,   # ✅ 여기 변경
         "relevance_scores": avg_relevance,
-        "message":message
+        "message":message,
+        "final_answer":final_message
     }
 
     
