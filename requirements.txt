@@ -1,0 +1,22 @@
+# 테스트용
+jupyter==1.1.1
+
+# vectordb 구축
+pandas==2.3.2 
+langchain-openai==0.3.8
+langchain==0.3.27
+
+# DB연결용
+python-dotenv==1.1.1
+psycopg2==2.9.11 
+
+# langraph 구축
+langgraph==1.0.1
+
+streamlit
+langsmith
+
+# html 구조로 front 표현 충분히 가능(markdown) 도 쓰고싶으면 설치 필요
+# markdown==3.6
+
+

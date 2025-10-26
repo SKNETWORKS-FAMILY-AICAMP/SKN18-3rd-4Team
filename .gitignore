@@ -9,8 +9,10 @@ __pycache__/
 *.pyo
 *.pyd
 
-.env/
+.env
 env/
 
 git-cmd.md
 README.md
+
+.vscode
