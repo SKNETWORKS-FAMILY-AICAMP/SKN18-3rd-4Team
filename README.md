@@ -3,64 +3,53 @@
 ---
 
 ## Team Information  
-<div align="center">
+<h3 align="center">👥 Team SK매직몰 챗봇 서비스</h3>
 
-<h3>👥 Team SK매직몰 챗봇 서비스</h3>
+<table align="center">
+  <tr>
+    <td align="center" width="130">
+      <img src="./image/githubimg1.png" width="80"><br>
+      <b>이상효</b><br>
+      팀장 (PM)<br>
+      <a href="https://github.com/username1">
+        <img src="https://img.shields.io/badge/GitHub-000?logo=github&logoColor=white&style=flat-square">
+      </a>
+    </td>
+    <td align="center" width="130">
+      <img src="./image/githubimg2.png" width="80"><br>
+      <b>김준규</b><br>
+      BACK (LangChain / VectorDB)<br>
+      <a href="https://github.com/username2">
+        <img src="https://img.shields.io/badge/GitHub-000?logo=github&logoColor=white&style=flat-square">
+      </a>
+    </td>
+    <td align="center" width="130">
+      <img src="./image/githubimg3.png" width="80"><br>
+      <b>김담하</b><br>
+      FRONT (UI/UX)<br>
+      <a href="https://github.com/username3">
+        <img src="https://img.shields.io/badge/GitHub-000?logo=github&logoColor=white&style=flat-square">
+      </a>
+    </td>
+    <td align="center" width="130">
+      <img src="./image/githubimg4.png" width="80"><br>
+      <b>손주영</b><br>
+      FRONT (Streamlit)<br>
+      <a href="https://github.com/username4">
+        <img src="https://img.shields.io/badge/GitHub-000?logo=github&logoColor=white&style=flat-square">
+      </a>
+    </td>
+    <td align="center" width="130">
+      <img src="./image/githubimg5.png" width="80"><br>
+      <b>임연희</b><br>
+      DATA (크롤링)<br>
+      <a href="https://github.com/username5">
+        <img src="https://img.shields.io/badge/GitHub-000?logo=github&logoColor=white&style=flat-square">
+      </a>
+    </td>
+  </tr>
+</table>
 
-<div style="display: flex; justify-content: center; gap: 10px; flex-wrap: nowrap;">
-
-  <!-- 1️⃣ 팀장 -->
-  <div style="border: 2px solid #333; border-radius: 10px; width: 130px; padding: 10px; background-color: #111;">
-    <img src="./image/githubimg1.png" width="80" height="80" style="border-radius: 10px;">
-    <h4 style="color: white; margin: 8px 0 4px; font-size: 14px;">이상효</h4>
-    <p style="color: #ccc; margin: 0; font-size: 12px;">팀장 (PM)</p>
-    <a href="https://github.com/username1">
-      <img src="https://img.shields.io/badge/GitHub-000?logo=github&logoColor=white&style=flat-square" alt="GitHub Badge">
-    </a>
-  </div>
-
-  <!-- 2️⃣ 팀원 -->
-  <div style="border: 2px solid #333; border-radius: 10px; width: 130px; padding: 10px; background-color: #111;">
-    <img src="./image/githubimg2.png" width="80" height="80" style="border-radius: 10px;">
-    <h4 style="color: white; margin: 8px 0 4px; font-size: 14px;">김준규</h4>
-    <p style="color: #ccc; margin: 0; font-size: 12px;">BACK (LangChain / VectorDB)</p>
-    <a href="https://github.com/username2">
-      <img src="https://img.shields.io/badge/GitHub-000?logo=github&logoColor=white&style=flat-square" alt="GitHub Badge">
-    </a>
-  </div>
-
-  <!-- 3️⃣ 팀원 -->
-  <div style="border: 2px solid #333; border-radius: 10px; width: 130px; padding: 10px; background-color: #111;">
-    <img src="./image/githubimg3.png" width="80" height="80" style="border-radius: 10px;">
-    <h4 style="color: white; margin: 8px 0 4px; font-size: 14px;">김담하</h4>
-    <p style="color: #ccc; margin: 0; font-size: 12px;">FRONT (UI/UX)</p>
-    <a href="https://github.com/username3">
-      <img src="https://img.shields.io/badge/GitHub-000?logo=github&logoColor=white&style=flat-square" alt="GitHub Badge">
-    </a>
-  </div>
-
-  <!-- 4️⃣ 팀원 -->
-  <div style="border: 2px solid #333; border-radius: 10px; width: 130px; padding: 10px; background-color: #111;">
-    <img src="./image/githubimg4.png" width="80" height="80" style="border-radius: 10px;">
-    <h4 style="color: white; margin: 8px 0 4px; font-size: 14px;">손주영</h4>
-    <p style="color: #ccc; margin: 0; font-size: 12px;">FRONT (Streamlit)</p>
-    <a href="https://github.com/username4">
-      <img src="https://img.shields.io/badge/GitHub-000?logo=github&logoColor=white&style=flat-square" alt="GitHub Badge">
-    </a>
-  </div>
-
-  <!-- 5️⃣ 팀원 -->
-  <div style="border: 2px solid #333; border-radius: 10px; width: 130px; padding: 10px; background-color: #111;">
-    <img src="./image/githubimg5.png" width="80" height="80" style="border-radius: 10px;">
-    <h4 style="color: white; margin: 8px 0 4px; font-size: 14px;">임연희</h4>
-    <p style="color: #ccc; margin: 0; font-size: 12px;">DATA (크롤링)</p>
-    <a href="https://github.com/username5">
-      <img src="https://img.shields.io/badge/GitHub-000?logo=github&logoColor=white&style=flat-square" alt="GitHub Badge">
-    </a>
-  </div>
-
-</div>
-</div>
 
 
 
