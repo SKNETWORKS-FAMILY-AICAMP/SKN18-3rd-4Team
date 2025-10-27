@@ -1,9 +1,11 @@
-# SK매직몰 기반 제품설명서 질의응답 시스템
+# 📌 Main Thema  
+**SK Magic Mall의 질의응답시스템에 단점에 대응한 새로운 Chat Bot Service 개발**
 
 ---
+---
+![header](https://capsule-render.vercel.app/api?type=soft&color=auto&height=300&section=header&text=SKN18-3rd-4team&fontSize=90)
 
-## Team Information  
-<h3 align="center">👥 Team SK매직몰 챗봇 서비스</h3>
+# 👨‍👩‍👧‍👦 Team Introduction
 
 <table align="center">
   <tr>
@@ -11,53 +13,45 @@
       <img src="./image/githubimg1.png" width="80"><br>
       <b>이상효</b><br>
       팀장 (PM)<br>
-      <a href="https://github.com/username1">
+      <a href="https://github.com/lsh7159">
         <img src="https://img.shields.io/badge/GitHub-000?logo=github&logoColor=white&style=flat-square">
       </a>
     </td>
     <td align="center" width="130">
       <img src="./image/githubimg2.png" width="80"><br>
       <b>김준규</b><br>
-      BACK (LangChain / VectorDB)<br>
-      <a href="https://github.com/username2">
+      1. 제품사용설명서 데이터 수집 <br> 2. RAG & LangChain Sub_Development <br> 3. Front Design <br>
+      <a href="https://github.com/JungyuOO">
         <img src="https://img.shields.io/badge/GitHub-000?logo=github&logoColor=white&style=flat-square">
       </a>
     </td>
     <td align="center" width="130">
       <img src="./image/githubimg3.png" width="80"><br>
       <b>김담하</b><br>
-      FRONT (UI/UX)<br>
-      <a href="https://github.com/username3">
+      1. Data_Crawling <br> 2. RAG & LangChain Sub_Development <br>
+      <a href="https://github.com/DamHA-Kim">
         <img src="https://img.shields.io/badge/GitHub-000?logo=github&logoColor=white&style=flat-square">
       </a>
     </td>
     <td align="center" width="130">
       <img src="./image/githubimg4.png" width="80"><br>
       <b>손주영</b><br>
-      FRONT (Streamlit)<br>
-      <a href="https://github.com/username4">
+      1. RAG & LangChain Maintenance <br>
+      <a href="https://github.com/sonjuyeong-00">
         <img src="https://img.shields.io/badge/GitHub-000?logo=github&logoColor=white&style=flat-square">
       </a>
     </td>
     <td align="center" width="130">
       <img src="./image/githubimg5.png" width="80"><br>
       <b>임연희</b><br>
-      DATA (크롤링)<br>
-      <a href="https://github.com/username5">
+      1. FAQ 데이터 수집 <br> 2. Augmenting the ChatBot with a Memory System <br> 3. RAG & LangChain Sub_Development <br>
+      <a href="https://github.com/yheeeon">
         <img src="https://img.shields.io/badge/GitHub-000?logo=github&logoColor=white&style=flat-square">
       </a>
     </td>
   </tr>
 </table>
-
-
-
-
-
-## 프로젝트 기간
-📆 2025.10 (TBD)  
-*주차별 산출물과 일정은 프로젝트 킥오프 이후 업데이트 예정입니다.*
-
+---
 ---
 
 ## 🛠️ Stacks
@@ -88,58 +82,209 @@
 ![Discord](https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)
 
 ---
+---
 
-![SK매직몰 챗봇 UI](image/output.png)
+
+# 1️⃣ 프로젝트 개요  
+
+## 🎯 Motivation
+
+### 🔹 [1. AI산업 지원확대](https://www.seoulwire.com/news/articleView.html?idxno=494723)
+<table align="center">
+  <tr>
+    <td align="center" width="300">
+        <img src="image/image-1.png" width="300"><br>
+  </tr>
+</table>
+
+- 정부가 초거대인공지능(AI)에 대한 지원을 확대하는 내용의"신성장 4.0 전략"을 발표
 
 ---
 
-# 1. 프로젝트 개요
+### 🔹 [2. 2025_OpenAI_GPT](https://www.lecturernews.com/news/articleView.html?idxno=189406)
+<table align="center">
+  <tr>
+    <td align="center" width="300">
+        <img src="image/image-2.png" width="300"><br>
+  </tr>
+</table>
 
-## 1-1. 프로젝트 목표
-SK매직 IoT 제품 사용자들이 제품 설치, 사용, 오류 해결과 관련된 매뉴얼을 자연어로 즉시 조회할 수 있도록 **RAG 기반 제품설명서 질의응답 시스템**을 구축합니다. 사용자가 “모델명 + 상황”으로 질문하면 적절한 설명서 페이지와 이미지를 찾아 **단계별로 이해하기 쉬운 답변**을 제공합니다.
-
-### 주요 특징
-- LLM 기반 자연어 이해와 LangGraph Self-RAG 파이프라인을 결합한 **정확한 응답 생성**
-- PostgreSQL + pgvector를 활용한 **제품별/카테고리별 문서 검색**
-- PDF · HTML · FAQ 등 이기종 문서를 통합한 **문단 수준 Retrieval**
-- LangSmith 연동을 통한 **프롬프트/워크플로우 모니터링**
-
-### 기대 효과
-- 고객센터 FAQ 탐색 시간을 줄이고 **셀프 디지털 케어** 경험 강화
-- 상담 인입 감소와 문제 해결 시간 단축
-- 사용자 모델/상황에 맞춘 **맞춤형 솔루션 제공**
+- 2022.11: AI와 자연스러운 대화 시작작
+- 2025.10: 국내 Chat_GPT 이용자 2천만명 이상
 
 ---
 
-## 1-2. 문제 정의
+### 🔹 [3. 기업만 편한 챗봇](https://www.thescoop.co.kr/news/articleView.html?idxno=307075)
 
-### 기존 채널의 한계
-- **SK매직 공식 챗봇**은 FAQ 링크 전달 수준에 머무르며 복잡한 설치·연동 질문을 지원하지 못함
-- PDF/웹 매뉴얼이 분산되어 있어 사용자가 직접 검색해야 하고, 검색·필터 기능이 제한적
-- 로그인 절차가 필요하거나 다중 질문을 병렬로 처리하기 어려움
+<table align="center">
+  <tr>
+    <td align="center" width="300">
+        <img src="image/image-5.png" width="300"><br>
+  </tr>
+</table>
 
-### 사용자 불편 사례
-- “에어워셔와 IoCare 연동 방법은?” → 앱/FAQ에서는 답변 제공 불가
-- “모델 SMC-1000 필터 교체 단계” → 매뉴얼 PDF에서 수동 탐색 필요
-- 오류 코드를 포함한 긴급 상황에서도 문서 탐색과 이해에 시간이 소요
+<table align="center">
+  <tr>
+    <td align="center" width="300">
+        <img src="image/image-4.png" width="300"><br>
+  </tr>
+</table>
+
+---
+---
+
+## 🎯 문제정의
+
+### 🔹 1. SK Magic Mall ChatBot Service
+---
+(1) 링크만 툭...
+<table align="center">
+  <tr>
+    <td align="center" width="300">
+        <img src="image/image-6.png" width="300"><br>
+  </tr>
+</table>
 
 ---
 
-## 1-3. 경쟁사 분석
+(2) 제대로 대답은 하나..?
 
-| 경쟁 서비스 | 특징 | 장점 | 한계점 |
-| --- | --- | --- | --- |
-| **Samsung SmartThings** | 스마트 기기 통합 제어 앱 | 앱 하나로 다양한 기기 관리, 실시간 상태 확인 | 연결 실패 원인 파악 어려움, 공식 매뉴얼 즉시 확인 불가 |
-| **LG ThinQ** | LG 가전 원격 제어 및 자동화 | 직관적 UI, 간단한 자동화 | 모델별 기능 편차, FAQ 수동 탐색 필요, 통합 검색 미지원 |
+<table align="center">
+  <tr>
+    <td align="center" width="300">
+        <img src="image/image-7.png" width="300"><br>
+  </tr>
+</table>
+- 취수량을 확인하라고..?
+---
 
-**우리의 차별점**
-- RAG 기반으로 **PDF·FAQ·HTML 매뉴얼 통합 검색**
-- 질문 의도에 맞춘 **문단·표·이미지 포함 응답**
-- LangGraph를 활용한 **자체 피드백(Self-RAG)**으로 부정확한 검색을 즉시 보정
+
+<table align="center">
+  <tr>
+    <td align="center" width="300">
+        <img src="image/image-8.png" width="300"><br>
+  </tr>
+</table>
+- 질문 3개 다 확인해보자!
+
+---
+<table align="center">
+  <tr>
+    <td align="center" width="300">
+        <img src="image/image-9.png" width="300"><br>
+  </tr>
+</table>
+- 이상한 대답도 나옴
+
+---
+---
+
+## 🎯 문제해결방안
+1. 기존의 SK Magic Mall ChatBot Service는 답변을 받으면 그와 관련된 링크만 툭 던짐
+
+2. 그 링크마저 질문과 관련이 없는 대답이 나올 수 있음
+
+3. SKN_3차_단위프로젝트_4팀은:
+    - 위의 문제를 해결하기 위해 RAG기술을 도입하여 질문과 가장 밀접하게 연관된 문서를 검색하고
+
+    - 그 내용을 기반으로 한 정확하고 문맥 이해력 있는 응답을 생성하도록 개선하였습니다.
+
+---
+---
+
+# 2️⃣ System Info
+
+## ERD
+<table align="center">
+  <tr>
+    <td align="center" width="300">
+        <img src="image/image-18.png" width="300"><br>
+  </tr>
+</table>
+
+## 화면설계
+<table align="center">
+  <tr>
+    <td align="center" width="500">
+        <img src="image/image-17.png" width="500"><br>
+  </tr>
+</table>
+
+## 🖥️ System Architecture
+<table align="center">
+  <tr>
+    <td align="center" width="800">
+        <img src="image/image-10.png" width="800"><br>
+  </tr>
+</table>
 
 ---
 
-## 1-4. 기술 구성 요약
+## 📊 LangGraph
+<table align="center">
+  <tr>
+    <td align="center" width="300">
+        <img src="image/image-11.png" width="300"><br>
+  </tr>
+</table>
+
+---
+---
+
+# 3️⃣ System Implementation
+
+<table align="center">
+  <tr>
+    <td align="center" width="500">
+        <img src="image/image-16.png" width="500"><br>
+  </tr>
+</table>
+
+<table align="center">
+  <tr>
+    <td align="center" width="500">
+        <img src="image/image-12.png" width="500"><br>
+  </tr>
+</table>
+
+<table align="center">
+  <tr>
+    <td align="center" width="500">
+        <img src="image/image-13.png" width="500"><br>
+  </tr>
+</table>
+
+<table align="center">
+  <tr>
+    <td align="center" width="500">
+        <img src="image/image-14.png" width="500"><br>
+  </tr>
+</table>
+
+<table align="center">
+  <tr>
+    <td align="center" width="500">
+        <img src="image/image-15.png" width="500"><br>
+  </tr>
+</table>
+
+---
+---
+
+# 4️⃣ 기대효과
+
+- 1. 기존의 챗봇서비스는 링크만 툭 던져주는 시스템이였으나 4팀이 개발한 서비스에서는 바로 정보가 제공되기 때문에 유저들의 가시성 측면에서 선호도가 높을 거라 생각된다.
+
+- 2. 기존의 챗봇서비스는 하나의 질문만 처리할 수 있지만 4팀이 개발한 챗봇 서비스는 2개 이상의 질문을 한번에 처리할 수 있다.
+
+- 3. 기존의 챗봇서비스는 유저들의 질문에 링크를 3~4개 제공하고 질문에 대한 정확도가 떨어지는 반면 4팀이 개발한 서비스에서는 질문에 대한 정확한 답변이 가능하기에 (RAG사용) 유저들의 서비스 제공 측면에서 이점이 있을것이라 생각한다.
+
+---
+---
+
+# 5️⃣ 기술구성
+
+## 1. 기술구성 요약
 
 | 구성 요소 | 상세 |
 | --- | --- |
@@ -152,7 +297,7 @@ SK매직 IoT 제품 사용자들이 제품 설치, 사용, 오류 해결과 관�
 
 ---
 
-# 2. 데이터 파이프라인
+## 2. 데이터 파이프라인
 
 1. **제품/FAQ 크롤링**  
    - Playwright headless 브라우저로 동적 페이지 완전 로딩 후 HTML 수집 (`data/faq/crawling/sk_magic_faq_crawling.py`)  
@@ -170,7 +315,7 @@ SK매직 IoT 제품 사용자들이 제품 설치, 사용, 오류 해결과 관�
 
 ---
 
-# 3. Self-RAG 파이프라인 (LangGraph)
+## 3. Self-RAG 파이프라인 (LangGraph)
 
 Self-RAG 파이프라인은 `commons/langgraph/workflow.py`에서 정의되며, 상태는 `SelfRAGState`(`commons/langgraph/initial_state.py`)로 추적합니다.
 
@@ -196,7 +341,7 @@ Self-RAG 파이프라인은 `commons/langgraph/workflow.py`에서 정의되며, 
 
 ---
 
-# 4. VectorDB & 데이터베이스
+## 4. VectorDB & 데이터베이스
 
 1. **환경 변수 설정**  
    - `.env.sample`을 복사해 `.env` 생성  
@@ -216,7 +361,7 @@ Self-RAG 파이프라인은 `commons/langgraph/workflow.py`에서 정의되며, 
 
 ---
 
-# 5. Streamlit UI
+## 5. Streamlit UI
 
 `app.py`는 Streamlit 기반 챗봇 화면과 LangSmith 트레이스 뷰를 제공하며 다음 기능을 포함합니다.
 
@@ -227,7 +372,7 @@ Self-RAG 파이프라인은 `commons/langgraph/workflow.py`에서 정의되며, 
 
 ---
 
-# 6. 예시 시나리오
+## 6. 예시 시나리오
 
 | 단계 | 내용 |
 | --- | --- |
@@ -240,7 +385,7 @@ Self-RAG 파이프라인은 `commons/langgraph/workflow.py`에서 정의되며, 
 
 ---
 
-# 7. 설치 및 실행 가이드
+## 7. 설치 및 실행 가이드
 
 ```bash
 # 1) 가상환경 생성 (Windows 예시)
@@ -267,7 +412,7 @@ streamlit run app.py
 
 ---
 
-# 8. 폴더 구조 (요약)
+## 8. 모듈화 (요약)
 
 ```
 SKN18-3rd-4Team/
@@ -288,10 +433,9 @@ SKN18-3rd-4Team/
 ├── .env.sample
 └── Vectordb 실행방법.md         # 벡터 DB 구축 매뉴얼
 ```
-
 ---
 
-# 9. 향후 계획
+## 9. 향후 계획
 
 - GraphRAG 기반 엔터티/관계 확장 검색 도입 (제품-부품-오류 코드 그래프)
 - 멀티모달 답변 강화를 위한 이미지 캡션 생성 및 도면 하이라이트 기능
@@ -300,7 +444,7 @@ SKN18-3rd-4Team/
 
 ---
 
-# 10. 참고 링크
+## 10. 참고 링크
 
 - SK매직 고객지원: https://service.skmagic.com/web/easy/easyMain.do?tabIndex=3#Back  
 - LangChain Docs: https://python.langchain.com  
@@ -309,3 +453,16 @@ SKN18-3rd-4Team/
 - Playwright Docs: https://playwright.dev/python/docs/intro  
 
 > 프로젝트 진행에 따라 README는 지속적으로 업데이트됩니다.
+
+---
+---
+# 프로젝트 총평
+- 이상효: 주제 및 데이터를 선정할 때 짧은 텍스트로는 RAG를 하는게 의미가없고, 긴 텍스트로 RAG를 진행하는게 의미가 있다 라는 강사님의 조언을 들었을 때 이게 되나 라는 생각을 하였습니다. 프로젝트가 진행되고 질문을 넣었을 때 정확한 답변이 추출되는 것을 보고 나서 이게되네 라는 생각도 하였습니다. 이번 프로젝트는 유독 팀장으로 삽질도 되게 많이 했는데 믿고 따라와준 팀원들에게 제일 고맙고 재미있게 프로젝트를 했던 것 같습니다. 마지막으로 아~~ 빠스 조타~~
+
+- 김준규: LangGraph를 활용해 RAG 시스템 기반 챗봇을 구현한 이번 프로젝트는, 문서 검색과 생성형 응답을 통합해 높은 질의응답 정확도와 유연한 흐름 제어를 달성했습니다. 팀원들이 각자 맡은 역할을 완벽히 수행해 프로젝트가 막힘없이 진행되었고, 원하는 기능을 구현할 수 있어 정말 행복했습니다. 노드 단위의 상태 그래프 구조를 통해 검색·평가·응답 단계를 명확히 분리하고, 임계값 기반의 평가 로직으로 의미 있는 문서만을 활용하도록 설계했다. 팀원 분들이 다들 너무 잘하셔서 전체적으로 시스템의 확장성과 유지보수성이 높고, 실제 서비스형 챗봇에 적용 가능한 완성도를 확보한 프로젝트였습니다.
+
+- 손주영: rag와 langraph 등 배운 것을 해보는 시간이었던것 같습니다. 사실 수업때는 감이 안잡혔는데, 직접 프로젝트에 적용해보면서 감을 잡은 것 같습니다. 각자 맡은 것을 개발하고 통합하면서 하나의 완성물이 되는 것을 보며 뿌듯하고 재밌었습니다. (4팀 화이팅!)
+
+- 김담하: 이번 프로젝트는 Lag에 대해 깊이 있게 학습할 수 있는 기회였으며 팀원들이 lag를 구현하고 적용하는 과정을 통해 협업하는 과정과 실제 서비스로 만들어지는 흐름을 이해하는대 좋은 경험이 되었습니다.
+
+- 임연희: 이번 프로젝트를 통해 LLM과 RAG 기반 서비스의 설계가 얼마나 중요한지 다시 한번 느꼈습니다. 혼자였다면 놓쳤을 시각과 아이디어들을 팀원들의 도움을 받아 해결하면서 많은 것을 배울 수 있었던 소중한 경험이었습니다. (4팀 최고 !)
