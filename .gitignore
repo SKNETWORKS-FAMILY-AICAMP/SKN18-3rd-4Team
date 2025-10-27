@@ -1,0 +1,17 @@
+.venv/
+
+database/
+*.csv
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+.env
+env/
+
+git-cmd.md
+README.md
+
+.vscode
