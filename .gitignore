@@ -1,6 +1,5 @@
 .venv/
 
-data/
 database/
 *.csv
 
