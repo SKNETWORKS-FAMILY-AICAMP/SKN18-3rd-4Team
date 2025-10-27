@@ -126,8 +126,8 @@
 
 <table align="center">
   <tr>
-    <td align="center" width="300">
-        <img src="image/image-4.png" width="300"><br>
+    <td align="center" width="800">
+        <img src="image/image-4.png" width="800"><br>
   </tr>
 </table>
 
