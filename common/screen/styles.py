@@ -191,6 +191,13 @@ def inject_global_styles() -> None:
         background: var(--sidebar-surface);
         border-right: 1px solid rgba(80, 99, 128, 0.18);
     }
+    [data-testid="stSidebar"] > div:first-child {
+        padding: 1.9rem 1.6rem 2.2rem;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        gap: 0;
+    }
     [data-testid="stSidebar"] * {
         color: var(--text-secondary);
     }
@@ -198,6 +205,39 @@ def inject_global_styles() -> None:
     [data-testid="stSidebar"] h3,
     [data-testid="stSidebar"] h4 {
         color: var(--text-primary);
+    }
+    .sidebar-brand {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        padding-bottom: 1.2rem;
+        border-bottom: 1px solid rgba(80, 99, 128, 0.25);
+    }
+    .sidebar-brand-main {
+        font-size: 1.65rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        letter-spacing: 0.03em;
+    }
+    .sidebar-brand-sub {
+        font-size: 1.12rem;
+        color: rgba(214, 222, 235, 0.75);
+        letter-spacing: 0.012em;
+        line-height: 1.4;
+    }
+    .sidebar-section {
+        margin-top: 1.45rem;
+    }
+    .sidebar-section .stRadio {
+        margin-top: 0.75rem;
+    }
+    .sidebar-footer {
+        margin-top: auto;
+        padding-top: 1.6rem;
+        border-top: 1px solid rgba(80, 99, 128, 0.25);
+        font-size: 0.82rem;
+        line-height: 1.6;
+        color: rgba(214, 222, 235, 0.7);
     }
     .sidebar-run-card {
         background: rgba(16, 23, 32, 0.92);
