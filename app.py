@@ -135,6 +135,16 @@ def render_message(container, role: str, content: str, timestamp: str, *, status
 
 # 사이드바 네비게이션
 with st.sidebar:
+    st.markdown(
+        """
+        <div class="sidebar-brand">
+            <span class="sidebar-brand-main">SKN_4Team</span>
+            <span class="sidebar-brand-sub">SK Magic mall ChatBOT_Service</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.markdown("<div class='sidebar-section'>", unsafe_allow_html=True)
     st.markdown("### 메뉴")
     nav_choice = st.radio(
         "화면 선택",
@@ -142,9 +152,14 @@ with st.sidebar:
         index=0,
         label_visibility="collapsed",
     )
-    st.markdown("---")
-    st.caption(
-        "LangGraph 트레이스에서는 LangSmith에 기록된 실행 내역과 단계별 Input/Output을 확인할 수 있습니다."
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class="sidebar-footer">
+            LangGraph 트레이스에서는 LangSmith에 기록된 실행 내역과 단계별 Input/Output을 확인할 수 있습니다.
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
 if nav_choice == "💬 Chat":
