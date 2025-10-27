@@ -4,8 +4,8 @@ from typing import Any
 from langchain.prompts import PromptTemplate
 from langgraph.graph import END
 
-from commons.llm.models import set_score_model
-from commons.langgraph.initial_state import SelfRAGState
+from common.llm.models import set_score_model
+from common.langgraph.initial_state import SelfRAGState
 
 from .search_query import search_question
 

@@ -13,9 +13,9 @@ try:
 except ImportError:  # pragma: no cover
     md_to_html = None
 
-from commons.screen.lang import sendLang
-from commons.screen.langsmith_view import fetch_langsmith_runs, format_duration, format_timestamp, summarize_payload
-from commons.screen.styles import inject_global_styles
+from common.screen.lang import sendLang
+from common.screen.langsmith_view import fetch_langsmith_runs, format_duration, format_timestamp, summarize_payload
+from common.screen.styles import inject_global_styles
 
 # 페이지 기본 설정
 st.set_page_config(
