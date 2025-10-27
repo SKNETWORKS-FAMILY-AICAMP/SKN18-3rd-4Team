@@ -29,7 +29,9 @@ def find_image_for_title(image_field: str, title: str) -> list[str]:
 
 def chat_llm(state: SelfRAGState) -> SelfRAGState:
     """검색된 문서 기반으로 기술/고객지원 답변 생성"""
-    print(f'{state.get("domain")} AI 챗봇 실행')
+    domain = state.get("domain")
+    domain_label = domain if domain else "통합"
+    print(f"{domain_label} AI 챗봇 실행")
     question = state.get("question")
 
     context_parts = []
